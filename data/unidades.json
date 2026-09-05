@@ -1,0 +1,44 @@
+[
+  {
+    "id": "un01",
+    "nome": "Raízes do Nordeste - Santo Antonio",
+    "endereco": "Av. Castelo Branco, 1240 - Santo Antonio, Vicosa - MG",
+    "horarioFuncionamento": {
+      "segundaASexta": "10:00-22:00",
+      "sabado": "10:00-23:00",
+      "domingo": "11:00-21:00"
+    },
+    "aceitaPedidoOnline": true,
+    "aceitaDriveThru": false,
+    "aceitaRetiradaNoBalcao": true,
+    "coordenadas": { "lat": -1234, "lng": -1234 }
+  },
+  {
+    "id": "un02",
+    "nome": "Raízes do Nordeste - Piedade",
+    "endereco": "Av. Bernardo Vieira de Melo, 3 - Piedade, Jaboatão dos Guararapes - PE",
+    "horarioFuncionamento": {
+      "segundaASexta": "10:30-22:00",
+      "sabado": "10:30-23:00",
+      "domingo": "11:00-21:00"
+    },
+    "aceitaPedidoOnline": true,
+    "aceitaDriveThru": true,
+    "aceitaRetiradaNoBalcao": true,
+    "coordenadas": { "lat": 1234, "lng": 1234 }
+  },
+  {
+    "id": "un03",
+    "nome": "Raízes do Nordeste - Bela Vista",
+    "endereco": "Av. Paulista, 251 - Bela Vista, Sao Paulo - SP",
+    "horarioFuncionamento": {
+      "segundaASexta": "10:00-22:00",
+      "sabado": "10:00-22:00",
+      "domingo": "12:00-21:00"
+    },
+    "aceitaPedidoOnline": true,
+    "aceitaDriveThru": false,
+    "aceitaRetiradaNoBalcao": true,
+    "coordenadas": { "lat": 1234, "lng": 1234 }
+  }
+]

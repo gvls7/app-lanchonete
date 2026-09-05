@@ -1,0 +1,35 @@
+[
+  {
+    "usuarioId": "usr01",
+    "pontosAtuais": 340,
+    "nivelAtual": "Prata",
+    "proximoNivel": "Ouro",
+    "pontosProximoNivel": 500,
+    "historico": [
+      { "id": "h01", "tipo": "credito", "pontos": 45, "descricao": "Pedido #10234 - Obrigado!", "data": "2026-08-28T19:42:00-03:00" },
+      { "id": "h02", "tipo": "credito", "pontos": 30, "descricao": "Pedido #10198 - Obrigado!", "data": "2026-08-15T20:05:00-03:00" },
+      { "id": "h03", "tipo": "resgate", "pontos": -100, "descricao": "Resgate: Sobremesa gratis", "data": "2026-07-30T13:10:00-03:00" }
+    ],
+    "recompensasDisponiveis": [
+      { "id": "rec01", "nome": "Sobremesa gratis", "pontosNecessarios": 100, "disponivel": true },
+      { "id": "rec02", "nome": "Bebida gratis", "pontosNecessarios": 60, "disponivel": true },
+      { "id": "rec03", "nome": "15% de desconto no próximo pedido", "pontosNecessarios": 250, "disponivel": true },
+      { "id": "rec04", "nome": "Lanche gratis (até R$ 30)", "pontosNecessarios": 500, "disponivel": false }
+    ]
+  },
+  {
+    "usuarioId": "usr02",
+    "pontosAtuais": 95,
+    "nivelAtual": "Bronze",
+    "proximoNivel": "Prata",
+    "pontosProximoNivel": 150,
+    "historico": [
+      { "id": "h04", "tipo": "credito", "pontos": 25, "descricao": "Pedido #10301 - Santo Antonio", "data": "2026-09-01T12:20:00-03:00" },
+      { "id": "h05", "tipo": "credito", "pontos": 70, "descricao": "Pedido #10250 - Santo Antonio", "data": "2026-08-20T21:00:00-03:00" }
+    ],
+    "recompensasDisponiveis": [
+      { "id": "rec02", "nome": "Bebida gratis", "pontosNecessarios": 60, "disponivel": true },
+      { "id": "rec01", "nome": "Sobremesa gratis", "pontosNecessarios": 100, "disponivel": false }
+    ]
+  }
+]

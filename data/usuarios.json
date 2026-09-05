@@ -1,0 +1,38 @@
+[
+  {
+    "id": "usr01",
+    "nome": "Gustavo Luiz",
+    "email": "gustavo.luiz@email.com",
+    "telefone": "(31) 12345-6789",
+    "senha": "123456",
+    "consentimentoLGPD": true,
+    "dataConsentimento": "2026-02-10T14:32:00-03:00",
+    "pontosAcumulados": 340,
+    "nivelFidelidade": "Prata",
+    "endereco": {
+      "logradouro": "Rua de teste do centro, 123",
+      "bairro": "Centro",
+      "cidade": "Vicosa",
+      "uf": "MG",
+      "cep": "36570-000"
+    }
+  },
+  {
+    "id": "usr02",
+    "nome": "Gabriel Silva",
+    "email": "gabriel.silva@email.com",
+    "telefone": "(31) 12345-6789",
+    "senha": "123456",
+    "consentimentoLGPD": true,
+    "dataConsentimento": "2026-05-22T09:15:00-03:00",
+    "pontosAcumulados": 95,
+    "nivelFidelidade": "Bronze",
+    "endereco": {
+      "logradouro": "Rua de teste, 123",
+      "bairro": "Santo Antonio",
+      "cidade": "Vicosa",
+      "uf": "MG",
+      "cep": "36570-000"
+    }
+  }
+]

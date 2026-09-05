@@ -1,0 +1,132 @@
+[
+  {
+    "unidadeId": "un01",
+    "categorias": [
+      {
+        "id": "cat01",
+        "nome": "Lanches",
+        "itens": [
+          {
+            "id": "item01",
+            "nome": "X-Carne de Sol",
+            "descricao": "Tapioca recheada com carne de sol desfiada, queijo coalho e manteiga de garrafa",
+            "preco": 24.90,
+            "calorias": 610,
+            "foto": "assets/img/item01.jpg",
+            "alergenicos": ["lactose"],
+            "disponivel": true,
+            "adicionais": [
+              { "id": "ad01", "nome": "Queijo coalho extra", "preco": 5.00 },
+              { "id": "ad02", "nome": "Bacon", "preco": 6.00 }
+            ],
+            "removiveis": ["manteiga de garrafa", "queijo coalho"]
+          },
+          {
+            "id": "item02",
+            "nome": "Burger Raiz",
+            "descricao": "Hambúrguer artesanal com baião de dois cremoso e queijo coalho grelhado",
+            "preco": 29.90,
+            "calorias": 780,
+            "foto": "assets/img/item02.jpg",
+            "alergenicos": ["gluten", "lactose"],
+            "disponivel": true,
+            "adicionais": [
+              { "id": "ad03", "nome": "Ovo", "preco": 3.50 }
+            ],
+            "removiveis": ["baião de dois"]
+          },
+          {
+            "id": "item03",
+            "nome": "Wrap de Charque",
+            "descricao": "Wrap integral com charque desfiado, macaxeira e vinagrete nordestino",
+            "preco": 22.50,
+            "calorias": 520,
+            "foto": "assets/img/item03.jpg",
+            "alergenicos": ["gluten"],
+            "disponivel": true,
+            "adicionais": [],
+            "removiveis": ["vinagrete"]
+          }
+        ]
+      },
+      {
+        "id": "cat02",
+        "nome": "Acompanhamentos",
+        "itens": [
+          {
+            "id": "item04",
+            "nome": "Macaxeira Frita",
+            "descricao": "Porção de macaxeira frita crocante com sal e alho",
+            "preco": 14.90,
+            "calorias": 340,
+            "foto": "assets/img/item04.jpg",
+            "alergenicos": [],
+            "disponivel": true,
+            "adicionais": [],
+            "removiveis": ["alho"]
+          },
+          {
+            "id": "item05",
+            "nome": "Pastel de Feira (3 un)",
+            "descricao": "Pastéis fritos de carne de sol com queijo",
+            "preco": 18.00,
+            "calorias": 450,
+            "foto": "assets/img/item05.jpg",
+            "alergenicos": ["gluten", "lactose"],
+            "disponivel": true,
+            "adicionais": [],
+            "removiveis": []
+          }
+        ]
+      },
+      {
+        "id": "cat03",
+        "nome": "Bebidas",
+        "itens": [
+          {
+            "id": "item06",
+            "nome": "Suco de Caju Natural",
+            "descricao": "Suco natural de caju sem açúcar",
+            "preco": 9.90,
+            "calorias": 120,
+            "foto": "assets/img/item06.jpg",
+            "alergenicos": [],
+            "disponivel": true,
+            "adicionais": [],
+            "removiveis": []
+          },
+          {
+            "id": "item07",
+            "nome": "Refrigerante Lata",
+            "descricao": "Lata 350ml, diversos sabores",
+            "preco": 7.50,
+            "calorias": 150,
+            "foto": "assets/img/item07.jpg",
+            "alergenicos": [],
+            "disponivel": true,
+            "adicionais": [],
+            "removiveis": []
+          }
+        ]
+      },
+      {
+        "id": "cat04",
+        "nome": "Sobremesas",
+        "itens": [
+          {
+            "id": "item08",
+            "nome": "Banana Frita",
+            "descricao": "Banana frita com queijo coalho derretido, canela e açúcar",
+            "preco": 16.90,
+            "calorias": 480,
+            "foto": "assets/img/item08.jpg",
+            "alergenicos": ["lactose"],
+            "disponivel": false,
+            "adicionais": [],
+            "removiveis": ["canela"]
+          }
+        ]
+      }
+    ]
+  }
+]

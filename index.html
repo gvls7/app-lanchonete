@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Raízes do Nordeste - Peça já</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌵</text></svg>" />
+  <meta name="description" content="Peça online nas lanchonetes Raízes do Nordeste: cardápio por unidade, fidelidade e promoções." />
+
+  <!-- Tokens de tema, reset base, layout/grid e componentes -->
+  <link rel="stylesheet" href="styles/tokens.css" />
+  <link rel="stylesheet" href="styles/reset.css" />
+  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/components.css" />
+</head>
+<!--
+  Data-theme controlado via JS (scripts/state.js) e pode ser "cliente" ou "admin".
+  data-canal é controlado via JS a partir do parâmetro de URL ?canal=totem.
+-->
+<body data-theme="cliente" data-canal="padrao">
+
+  <!-- Barra de navegação fixa, montada por scripts/components/navbar.js -->
+  <header id="navbar" class="navbar"></header>
+
+  <!-- Área principal: cada tela é renderizada aqui pelo roteador (scripts/app.js) -->
+  <main id="app" class="app-view" tabindex="-1"></main>
+
+  <!-- Navegação padrão de app mobile, escondida em telas desktop via CSS -->
+  <nav id="navbar-inferior" class="navbar-inferior" aria-label="Navegação principal"></nav>
+
+  <!-- Aviso de cookies (LGPD), inserido e escondido após consentimento -->
+  <div id="cookie-banner" class="cookie-banner" hidden></div>
+
+  <!-- Contêiner genérico de modal, reaproveitado por várias telas (LGPD, confirmações, etc.) -->
+  <div id="modal-root"></div>
+
+  <!-- Área para leitores de tela anunciarem mudanças de tela/carrinho -->
+  <div id="aria-live-region" class="sr-only" aria-live="polite"></div>
+
+  <!-- Módulos JS carregados como ES Modules nativos do navegador, sem framework -->
+  <script type="module" src="scripts/app.js"></script>
+</body>
+</html>

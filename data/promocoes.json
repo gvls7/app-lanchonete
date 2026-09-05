@@ -1,0 +1,28 @@
+[
+  {
+    "id": "promo01",
+    "titulo": "Terça da Tapioca",
+    "descricao": "20% de desconto em todos os pedidos de tapioca",
+    "tipo": "percentual",
+    "valorDesconto": 20,
+    "diasSemana": ["terca"],
+    "dataInicio": "2026-01-01T00:00:00-03:00",
+    "dataFim": "2026-12-31T23:59:59-03:00",
+    "ativa": true,
+    "codigo": null,
+    "usoMaximo": null
+  },
+  {
+    "id": "promo02",
+    "titulo": "Combo Fidelidade Ouro",
+    "descricao": "R$ 10 de desconto para clientes nível Ouro ou Diamante em pedidos acima de R$ 50",
+    "tipo": "valorFixo",
+    "valorDesconto": 10.00,
+    "diasSemana": null,
+    "dataInicio": "2026-03-01T00:00:00-03:00",
+    "dataFim": "2026-12-31T23:59:59-03:00",
+    "ativa": true,
+    "codigo": "OURO10",
+    "usoMaximo": 1
+  }
+]
