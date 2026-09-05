@@ -8,6 +8,12 @@ import { definirUsuario, registrarConsentimento } from "../state.js";
 import { navegarPara } from "../app.js";
 import { abrirModal } from "../components/modal.js";
 
+// Contas mockadas em data/usuarios.json, expostas aqui para que quem estiver avaliando o protótipo consiga testar o login sem precisar abrir o JSON.
+const CONTAS_TESTE = [
+  { email: "gustavo.luiz@email.com", senha: "123456" },
+  { email: "gabriel.silva@email.com", senha: "123456" },
+];
+
 function abrirConsentimentoCadastro(aoConsentir) {
   abrirModal({
     titulo: "Antes de continuar",
@@ -54,6 +60,24 @@ export function renderLogin(container) {
           <p>${modoCadastro ? "Leva menos de um minuto." : "Acompanhe pedidos, pontos e promoções."}</p>
         </div>
 
+        ${!modoCadastro ? `
+          <div class="cartao" style="background:var(--cor-superficie-alt); font-size:0.85rem;">
+            <strong>Contas de teste (protótipo, dados mockados)</strong>
+            <div style="display:flex; flex-direction:column; gap:var(--espaco-2); margin-top:var(--espaco-2);">
+              ${CONTAS_TESTE.map(
+                (conta) => `
+                <div class="flex-espacado" style="flex-wrap:wrap; gap:var(--espaco-2);">
+                  <span>${conta.email} — senha: ${conta.senha}</span>
+                  <button type="button" class="botao botao--texto" style="min-height:auto; padding:var(--espaco-1) var(--espaco-2);" data-preencher-email="${conta.email}" data-preencher-senha="${conta.senha}">
+                    Usar esta conta
+                  </button>
+                </div>
+              `
+              ).join("")}
+            </div>
+          </div>
+        ` : ""}
+
         <form id="form-auth" class="cartao" novalidate>
           ${modoCadastro ? `
             <div class="campo">
@@ -99,6 +123,13 @@ export function renderLogin(container) {
     container.querySelector('[data-papel="alternar"]').addEventListener("click", () => {
       modoCadastro = !modoCadastro;
       montar();
+    });
+
+    container.querySelectorAll("[data-preencher-email]").forEach((botao) => {
+      botao.addEventListener("click", () => {
+        container.querySelector("#email").value = botao.dataset.preencherEmail;
+        container.querySelector("#senha").value = botao.dataset.preencherSenha;
+      });
     });
 
     container.querySelector('[data-papel="continuar-visitante"]').addEventListener("click", () => {

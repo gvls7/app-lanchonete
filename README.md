@@ -14,7 +14,7 @@ Qualquer servidor estático simples resolve. Exemplos:
 ```bash
 
 # Opção 1: Extensão "Live Server" do VS Code (Recomendado)
-# Basta clicar em "Go Live" na barra inferior do VS Code.
+Basta clicar em "Go Live" na barra inferior do VS Code.
 
 # Opção 2: Python
 python3 -m http.server 8080

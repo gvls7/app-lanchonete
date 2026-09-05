@@ -31,6 +31,22 @@
   font-size: 0.8rem;
   opacity: 0.9;
   font-weight: 400;
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2);
+  flex-wrap: wrap;
+}
+
+/* Link trocar unidade - permite voltar à tela de seleção de unidade a partir de qualquer tela do fluxo (antes só era possível editando a URL manualmente). */
+.navbar__trocar-unidade {
+  font-size: 0.75rem;
+  text-decoration: underline;
+  opacity: 0.9;
+  white-space: nowrap;
+}
+
+.navbar__trocar-unidade:hover {
+  opacity: 1;
 }
 
 .navbar__acoes {
@@ -53,6 +69,53 @@
 .navbar__carrinho {
   position: relative;
 }
+
+/* ---------- Menu suspenso da conta (nome do usuário na navbar) ---------- */
+.navbar__conta {
+  position: relative;
+}
+
+.navbar__conta-botao {
+  cursor: pointer;
+}
+
+.navbar__conta-menu {
+  position: absolute;
+  top: calc(100% + var(--espaco-2));
+  right: 0;
+  z-index: 30;
+  min-width: 180px;
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-md);
+  box-shadow: var(--sombra-md);
+  padding: var(--espaco-2);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Mesma correção do banner de cookies: sem esta regra, o display:flex acima sobrepoe o [hidden] nativo e o menu nunca fecharia de verdade. */
+.navbar__conta-menu[hidden] {
+  display: none;
+}
+
+.navbar__conta-menu a,
+.navbar__conta-menu button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: var(--espaco-2) var(--espaco-3);
+  border-radius: var(--raio-sm);
+  color: var(--cor-texto);
+  font-size: 0.9rem;
+}
+
+.navbar__conta-menu a:hover,
+.navbar__conta-menu button:hover {
+  background: var(--cor-superficie-alt);
+}
+
 
 .navbar__carrinho-contador {
   position: absolute;
@@ -136,7 +199,11 @@
   color: var(--cor-texto-sobre-primaria);
 }
 .botao--primario:hover { filter: brightness(1.08); }
-.botao--primario:disabled { opacity: 0.5; cursor: not-allowed; }
+/* Estado desabilitado vale para qualquer variante de botão (primário, secundário, texto), por exemplo: "Resgatar" na tela de Fidelidade quando ocliente ainda não tem pontos suficientes. */
+.botao:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 
 .botao--secundario {
   background: transparent;
@@ -342,6 +409,11 @@
   flex-direction: column;
   gap: var(--espaco-3);
   box-shadow: var(--sombra-md);
+}
+
+/* Sem esta regra, o "display: flex" acima sobrepõe o comportamento nativodo atributo [hidden] e o banner nunca desaparece, mesmo depois de aceitar/recusar ou em visitas seguintes. */
+.cookie-banner[hidden] {
+  display: none;
 }
 
 @media (min-width: 768px) {

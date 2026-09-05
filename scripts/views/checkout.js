@@ -4,7 +4,7 @@
   pagamento não são armazenados localmente — não existe nenhum campo de número de cartão sendo salvo em estado.js/localStorage.
 */
 
-import { estado, ehTotem } from "../state.js";
+import { estado, ehTotem, definirPedidoAtual, limparCarrinho } from "../state.js";
 import { navegarPara } from "../app.js";
 import { formatarPreco } from "../components/productCard.js";
 
@@ -61,12 +61,13 @@ export function renderCheckout(container) {
         </div>
 
         <p class="campo__ajuda">
-          Dados de pagamento não são armazenados neste sistema — o envio é apenas
-          representado, sem processar transações reais (conforme LGPD, Art. 46°).
+           ${formaSelecionada === "dinheiro"
+            ? "Nenhum valor é cobrado agora - o pagamento em dinheiro é feito e confirmado pelo atendente no momento da retirada."
+            : "Dados de pagamento não são armazenados neste sistema - o envio é apenas uma simulação, sem processar transações reais (conforme LGPD, Art. 46°)."}
         </p>
 
         <button type="button" class="botao botao--primario botao--bloco" data-papel="pagar">
-          Pagar ${formatarPreco(resumo.total)}
+          ${formaSelecionada === "dinheiro" ? "Confirmar pedido" : `Pagar ${formatarPreco(resumo.total)}`}
         </button>
       </section>
     `;
@@ -79,6 +80,24 @@ export function renderCheckout(container) {
     });
 
     container.querySelector('[data-papel="pagar"]').addEventListener("click", () => {
+      // Dinheiro na retirada não passa por nenhum sistema de pagamento confirmado com a cozinha, mas o pagamento em si fica pendente até ser recebido presencialmente na retirada.
+      if (formaSelecionada === "dinheiro") {
+        const numeroPedido = `#${Math.floor(10000 + Math.random() * 9000)}`;
+        definirPedidoAtual({
+          numero: numeroPedido,
+          unidade: estado.unidadeSelecionada,
+          itens: estado.carrinho,
+          total: resumo.total,
+          pontosGanhos: resumo.pontosAGanhar,
+          formaPagamento: "dinheiro",
+          statusPagamento: "pendente",
+          status: "recebido",
+          criadoEm: new Date().toISOString(),
+        });
+        limparCarrinho();
+        navegarPara("#/pedido/status");
+        return;
+      }
       estado.formaPagamentoSelecionada = formaSelecionada;
       navegarPara("#/pagamento/processando");
     });

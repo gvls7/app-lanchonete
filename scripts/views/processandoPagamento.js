@@ -30,6 +30,7 @@ export function renderProcessandoPagamento(container) {
         total: estado.pedidoResumo.total,
         pontosGanhos: estado.pedidoResumo.pontosAGanhar,
         formaPagamento: estado.formaPagamentoSelecionada,
+        statusPagamento: "pago",
         status: "recebido",
         criadoEm: new Date().toISOString(),
       });
