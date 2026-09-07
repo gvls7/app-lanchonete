@@ -26,31 +26,36 @@ export async function renderFidelidade(container) {
   // fidelidade.json — usamos o registro de exemplo (usr01) como referência.
   const fidelidade = (await buscarFidelidade(estado.usuario.id)) || (await buscarFidelidade("usr01"));
 
-  container.innerHTML = `
-    <section class="tela" style="max-width:560px; margin:0 auto;">
-      <div class="tela-cabecalho">
-        <h1>Fidelidade</h1>
-        <p>Olá, ${estado.usuario.nome}</p>
-      </div>
+  let mensagemResgate = "";
+
+  function render() {
+    container.innerHTML = `
+      <section class="tela" style="max-width:560px; margin:0 auto;">
+        <div class="tela-cabecalho">
+          <h1>Fidelidade</h1>
+          <p>Olá, ${estado.usuario.nome}</p>
+        </div>
 
       ${renderBadgeFidelidade(fidelidade)}
 
+      ${mensagemResgate ? `<p class="selo selo--sucesso">${mensagemResgate}</p>` : ""}
+      
       <div>
         <h2 style="font-size:1rem; margin-bottom:var(--espaco-3);">Recompensas disponíveis</h2>
-        <div style="display:flex; flex-direction:column; gap:var(--espaco-2);">
-          ${fidelidade.recompensasDisponiveis
-            .map(
-              (r) => `
-            <div class="cartao flex-espacado">
-              <div>
-                <strong>${r.nome}</strong>
-                <p style="font-size:0.8rem; color:var(--cor-texto-secundario);">${r.pontosNecessarios} pontos</p>
+          <div style="display:flex; flex-direction:column; gap:var(--espaco-2);">
+            ${fidelidade.recompensasDisponiveis
+              .map(
+                (r) => `
+              <div class="cartao flex-espacado">
+                <div>
+                  <strong>${r.nome}</strong>
+                  <p style="font-size:0.8rem; color:var(--cor-texto-secundario);">${r.pontosNecessarios} pontos</p>
               </div>
               <button type="button" class="botao ${r.disponivel && fidelidade.pontosAtuais >= r.pontosNecessarios ? "botao--primario" : "botao--secundario"}"
-                data-recompensa="${r.id}"
-                ${r.disponivel && fidelidade.pontosAtuais >= r.pontosNecessarios ? "" : "disabled"}>
-                Resgatar
-              </button>
+                  data-recompensa="${r.id}"
+                  ${r.disponivel && fidelidade.pontosAtuais >= r.pontosNecessarios ? "" : "disabled"}>
+                  Resgatar
+                </button>
             </div>
           `
             )
@@ -77,8 +82,25 @@ export async function renderFidelidade(container) {
   `;
 
   container.querySelectorAll("[data-recompensa]:not([disabled])").forEach((botao) => {
-    botao.addEventListener("click", () => {
-      alert("Resgate simulado! Em uma integração real, os pontos seriam debitados e um cupom seria gerado.");
+      botao.addEventListener("click", () => {
+        const recompensa = fidelidade.recompensasDisponiveis.find((r) => r.id === botao.dataset.recompensa);
+        if (!recompensa || fidelidade.pontosAtuais < recompensa.pontosNecessarios) return;
+
+        // Resgate simulado (sem backend real): debita os pontos e registra o lançamento no extrato imediatamente, para refletir na tela - em uma integração real, o débito e a geração do cupom aconteceriam no servidor.
+        
+        fidelidade.pontosAtuais -= recompensa.pontosNecessarios;
+        fidelidade.historico.unshift({
+          id: `resgate-${Date.now()}`,
+          tipo: "resgate",
+          pontos: -recompensa.pontosNecessarios,
+          descricao: `Resgate: ${recompensa.nome}`,
+          data: new Date().toISOString(),
+        });
+        mensagemResgate = `Resgate confirmado: "${recompensa.nome}" — ${recompensa.pontosNecessarios} pontos debitados.`;
+        render();
+      });
     });
-  });
+  }
+
+  render();
 }
