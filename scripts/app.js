@@ -1,5 +1,4 @@
 /*
-  app.js
   Ponto de entrada da aplicação e roteador da SPA (Single Page Application).
   Não usa nenhum framework: um roteador simples baseado em hash (#/rota)
   troca o conteúdo de <main id="app"> conforme a URL muda, e cada "tela"
@@ -21,9 +20,10 @@ import { renderConfirmacaoPagamento } from "./views/confirmacaoPagamento.js";
 import { renderStatusPedido } from "./views/statusPedido.js";
 import { renderFidelidade } from "./views/fidelidade.js";
 import { renderPromocoes } from "./views/promocoes.js";
+import { renderPrivacidade } from "./views/privacidade.js";
 
-// Cada rota tem um padrão (com :parametros opcionais) e a função de render
-// correspondente. A ordem não importa pois cada padrão é único.
+
+// Cada rota tem um padrão (com :parametros opcionais) e a função de render correspondente. A ordem não importa pois cada padrão é único.
 const ROTAS = [
   { padrao: "#/boas-vindas", render: renderBoasVindas },
   { padrao: "#/login", render: renderLogin },
@@ -36,6 +36,8 @@ const ROTAS = [
   { padrao: "#/pedido/status", render: renderStatusPedido },
   { padrao: "#/fidelidade", render: renderFidelidade },
   { padrao: "#/promocoes", render: renderPromocoes },
+  { padrao: "#/privacidade", render: renderPrivacidade },
+
 ];
 
 function casarRota(hashAtual) {
@@ -108,8 +110,7 @@ function iniciar() {
 
   window.addEventListener("hashchange", renderizarRotaAtual);
 
-  // Mantém a navbar (contador do carrinho, sessão) sincronizada sempre que
-  // o estado global muda, mesmo sem navegação de rota.
+  // Mantém a navbar (contador do carrinho, sessão) sincronizada sempre que o estado global muda, mesmo sem navegação de rota.
   inscrever(() => renderNavbar(location.hash || "#/boas-vindas"));
 
   renderizarRotaAtual();

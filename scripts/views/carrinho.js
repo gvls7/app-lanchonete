@@ -1,6 +1,9 @@
 /*
   Carrinho, cupom de promoção no checkout e mostra a estimativa de pontos de fidelidade a ganhar (1 ponto por R$ 1,00).
 */
+/*
+Cupons são benefícios do programa de fidelidade, então só podem ser aplicados por quem está logado. Sem login, o bloco de cupom fica desabilitado com uma chamada para entrar na conta.
+*/
 
 import { buscarPromocaoPorCodigo } from "../data.js";
 import {
@@ -14,6 +17,7 @@ import { navegarPara } from "../app.js";
 import { formatarPreco } from "../components/productCard.js";
 
 let cupomAplicado = null;
+let mensagemCupom = { texto: "", classe: "campo__ajuda" };
 
 export async function renderCarrinho(container) {
   function calcularDesconto(subtotal) {
@@ -22,11 +26,29 @@ export async function renderCarrinho(container) {
     return Math.min(cupomAplicado.valorDesconto, subtotal);
   }
 
+  function renderBlocoCupom() {
+    if (!estado.usuario) {
+      return `
+        <div class="bloqueio-login">
+          <span>Entre na sua conta para aplicar cupons de fidelidade.</span>
+          <button type="button" class="botao botao--secundario botao--bloco" data-papel="login-cupom">Entrar ou criar conta</button>
+        </div>
+      `;
+    }
+    return `
+      <div class="flex-linha">
+        <input type="text" id="campo-cupom" placeholder="Ex: OURO10" style="flex:1; padding:var(--espaco-2); border-radius:var(--raio-sm); border:1px solid var(--cor-borda);" />
+        <button type="button" class="botao botao--secundario" data-papel="aplicar-cupom">Aplicar</button>
+      </div>
+      <p id="mensagem-cupom" class="${mensagemCupom.classe}">${mensagemCupom.texto}</p>
+    `;
+  }
+
   function render() {
     const subtotal = calcularSubtotalCarrinho();
-    const desconto = calcularDesconto(subtotal);
+    const desconto = estado.usuario ? calcularDesconto(subtotal) : 0;
     const total = Math.max(0, subtotal - desconto);
-    const pontosAGanhar = Math.floor(total); // RF19: 1 ponto por R$ 1,00 gasto
+    const pontosAGanhar = Math.floor(total);
 
     container.innerHTML = `
       <section class="tela">
@@ -50,11 +72,7 @@ export async function renderCarrinho(container) {
 
             <div class="layout-split__lateral cartao">
               <h2 style="font-size:1rem; margin-bottom:var(--espaco-3);">Cupom de desconto</h2>
-              <div class="flex-linha">
-                <input type="text" id="campo-cupom" placeholder="Ex: OURO10" style="flex:1; padding:var(--espaco-2); border-radius:var(--raio-sm); border:1px solid var(--cor-borda);" />
-                <button type="button" class="botao botao--secundario" data-papel="aplicar-cupom">Aplicar</button>
-              </div>
-              <p id="mensagem-cupom" class="campo__ajuda"></p>
+              ${renderBlocoCupom()}
 
               <div style="margin-top:var(--espaco-4);">
                 <div class="resumo-linha"><span>Subtotal</span><span>${formatarPreco(subtotal)}</span></div>
@@ -100,21 +118,27 @@ export async function renderCarrinho(container) {
       });
     });
 
+     const botaoLoginCupom = container.querySelector('[data-papel="login-cupom"]');
+    if (botaoLoginCupom) {
+      botaoLoginCupom.addEventListener("click", () => navegarPara("#/login"));
+    }
+
     const botaoAplicarCupom = container.querySelector('[data-papel="aplicar-cupom"]');
     if (botaoAplicarCupom) {
       botaoAplicarCupom.addEventListener("click", async () => {
+        if (!estado.usuario) {
+          navegarPara("#/login");
+          return;
+        }
         const codigo = container.querySelector("#campo-cupom").value.trim();
-        const mensagemEl = container.querySelector("#mensagem-cupom");
         if (!codigo) return;
         const promocao = await buscarPromocaoPorCodigo(codigo);
         if (!promocao) {
-          mensagemEl.textContent = "Cupom inválido ou expirado.";
-          mensagemEl.className = "selo selo--indisponivel";
+          mensagemCupom = { texto: "Cupom inválido ou expirado.", classe: "selo selo--indisponivel" };
           cupomAplicado = null;
         } else {
           cupomAplicado = promocao;
-          mensagemEl.textContent = `Cupom "${promocao.titulo}" aplicado!`;
-          mensagemEl.className = "selo selo--sucesso";
+          mensagemCupom = { texto: `Cupom "${promocao.titulo}" aplicado!`, classe: "selo selo--sucesso" };
         }
         render();
       });
@@ -144,6 +168,11 @@ export async function renderCarrinho(container) {
         </div>
       </div>
     `;
+  }
+
+  if (!estado.usuario) {
+    cupomAplicado = null;
+    mensagemCupom = { texto: "", classe: "campo__ajuda" };
   }
 
   render();

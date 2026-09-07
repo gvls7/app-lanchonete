@@ -1,6 +1,5 @@
 /*
-  Login / Cadastro com aviso de LGPD - cobre cadastro, login, recuperação de senha, link
-  simulado e os pontos LGPD (consentimento explícito, checkbox obrigatório no cadastro, finalidade declarada e minimização de dados: só pedimos nome, e-mail, telefone e senha).
+  Login / Cadastro com aviso de LGPD - cobre cadastro, login, recuperação de senha, link simulado e os pontos LGPD (consentimento explícito, checkbox obrigatório no cadastro, finalidade declarada e minimização de dados).
 */
 
 import { autenticar } from "../data.js";
@@ -13,6 +12,40 @@ const CONTAS_TESTE = [
   { email: "gustavo.luiz@email.com", senha: "123456" },
   { email: "gabriel.silva@email.com", senha: "123456" },
 ];
+
+const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function emailValido(valor) {
+  return REGEX_EMAIL.test(valor.trim());
+}
+
+function formatarTelefone(valorDigitado) {
+  const digitos = valorDigitado.replace(/\D/g, "").slice(0, 11);
+
+  if (digitos.length === 0) return "";
+  if (digitos.length <= 2) return `(${digitos}`;
+
+  const ddd = digitos.slice(0, 2);
+  const resto = digitos.slice(2);
+
+  if (digitos.length <= 6) {
+    return `(${ddd}) ${resto}`;
+  }
+  if (digitos.length <= 10) {
+    // (xx) XXXX-XXXX
+    return `(${ddd}) ${resto.slice(0, 4)}-${resto.slice(4)}`;
+  }
+  // (xx) XXXXX-XXXX
+  return `(${ddd}) ${resto.slice(0, 5)}-${resto.slice(5)}`;
+}
+
+function telefoneValido(valorFormatado) {
+  const digitos = valorFormatado.replace(/\D/g, "");
+  if (digitos.length !== 10 && digitos.length !== 11) return false;
+  const ddd = Number(digitos.slice(0, 2));
+  return ddd >= 11 && ddd <= 99;
+}
+
 
 function abrirConsentimentoCadastro(aoConsentir) {
   abrirModal({
@@ -88,11 +121,13 @@ export function renderLogin(container) {
           <div class="campo">
             <label for="email">E-mail</label>
             <input type="email" id="email" name="email" required autocomplete="email" value="gustavo.luiz@email.com" />
+            <span id="erro-email" class="campo__erro" hidden>Insira um e-mail válido.</span>
           </div>
           ${modoCadastro ? `
             <div class="campo">
               <label for="telefone">Telefone</label>
-              <input type="tel" id="telefone" name="telefone" required autocomplete="tel" placeholder="(00) 00000-0000" />
+              <input type="tel" id="telefone" name="telefone" required autocomplete="tel" inputmode="numeric" placeholder="(00) 00000-0000" maxlength="15" />
+              <span id="erro-telefone" class="campo__erro" hidden>Insira um telefone válido.</span>
             </div>
           ` : ""}
           <div class="campo">
@@ -143,6 +178,47 @@ export function renderLogin(container) {
       });
     }
 
+    const campoEmail = container.querySelector("#email");
+    const erroEmailEl = container.querySelector("#erro-email");
+
+    function validarCampoEmail() {
+      const valido = emailValido(campoEmail.value);
+      campoEmail.classList.toggle("campo--invalido", !valido);
+      erroEmailEl.hidden = valido;
+      return valido;
+    }
+
+    campoEmail.addEventListener("blur", validarCampoEmail);
+    campoEmail.addEventListener("input", () => {
+      // Corrige o aviso assim que o valor volta a ficar válido, sem esperar
+      // o próximo blur.
+      if (!erroEmailEl.hidden) validarCampoEmail();
+    });
+
+    const campoTelefone = container.querySelector("#telefone");
+    const erroTelefoneEl = container.querySelector("#erro-telefone");
+
+    function validarCampoTelefone() {
+      if (!campoTelefone) return true;
+      const valido = telefoneValido(campoTelefone.value);
+      campoTelefone.classList.toggle("campo--invalido", !valido);
+      erroTelefoneEl.hidden = valido;
+      return valido;
+    }
+
+    if (campoTelefone) {
+      campoTelefone.addEventListener("input", () => {
+        const posicaoAntes = campoTelefone.selectionStart;
+        const tamanhoAntes = campoTelefone.value.length;
+        campoTelefone.value = formatarTelefone(campoTelefone.value);
+        const diferenca = campoTelefone.value.length - tamanhoAntes;
+        const novaPosicao = Math.max(0, (posicaoAntes ?? campoTelefone.value.length) + diferenca);
+        campoTelefone.setSelectionRange(novaPosicao, novaPosicao);
+        if (!erroTelefoneEl.hidden) validarCampoTelefone();
+      });
+      campoTelefone.addEventListener("blur", validarCampoTelefone);
+    }
+
     container.querySelector("#form-auth").addEventListener("submit", async (evento) => {
       evento.preventDefault();
       const dados = new FormData(evento.target);
@@ -151,14 +227,26 @@ export function renderLogin(container) {
       const erroEl = container.querySelector("#erro-auth");
       erroEl.hidden = true;
 
+       const emailOk = validarCampoEmail();
+      const telefoneOk = campoTelefone ? validarCampoTelefone() : true;
+
+      if (!emailOk) {
+        campoEmail.focus();
+        return;
+      }
+      if (!telefoneOk) {
+        campoTelefone.focus();
+        return;
+      }
+
       if (modoCadastro) {
         abrirConsentimentoCadastro(() => {
-          // Cadastro mockado: não persiste em usuarios.json (somente leitura),
-          // mas já autentica a sessão com os dados informados no formulário.
+          // Cadastro mockado: não persiste em usuarios.json (somente leitura), mas já autentica a sessão com os dados informados no formulário.
           definirUsuario({
             id: "novo-usuario",
             nome: dados.get("nome"),
             email,
+            telefone: dados.get("telefone"),
             pontosAcumulados: 0,
             nivelFidelidade: "Bronze",
           });

@@ -346,10 +346,24 @@
   border-color: var(--cor-primaria);
 }
 
+.campo input.campo--invalido {
+  border-color: var(--cor-erro);
+}
+
+.campo input.campo--invalido:focus {
+  border-color: var(--cor-erro);
+}
+
 .campo__ajuda {
   font-size: 0.75rem;
   color: var(--cor-texto-secundario);
 }
+
+.campo__erro {
+  font-size: 0.75rem;
+  color: var(--cor-erro);
+}
+
 
 .campo-checkbox {
   display: flex;
@@ -625,4 +639,48 @@
 .chip-opcao__descricao {
   font-size: 0.8rem;
   color: var(--cor-texto-secundario);
+}
+
+/* ---------- Bloqueio de recursos que exigem login ---------- */
+
+.bloqueio-login {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-2);
+  padding: var(--espaco-3);
+  background: var(--cor-superficie-alt);
+  border-radius: var(--raio-md);
+  font-size: 0.85rem;
+  color: var(--cor-texto-secundario);
+}
+
+/* ---------- Página de Privacidade / Termo de consentimento ---------- */
+
+.documento-legal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-3);
+}
+
+.documento-legal h2 {
+  font-size: 1.05rem;
+  margin-top: var(--espaco-3);
+}
+
+.documento-legal p,
+.documento-legal li {
+  font-size: 0.9rem;
+  color: var(--cor-texto-secundario);
+}
+
+.documento-legal ul {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-2);
+  padding-left: var(--espaco-4);
+  list-style: disc;
+}
+
+.documento-legal .selo {
+  margin-bottom: var(--espaco-2);
 }
