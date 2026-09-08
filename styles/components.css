@@ -70,6 +70,10 @@
   position: relative;
 }
 
+.navbar[hidden] {
+  display: none;
+}
+
 /* ---------- Menu suspenso da conta (nome do usuário na navbar) ---------- */
 .navbar__conta {
   position: relative;
@@ -152,6 +156,10 @@
   .navbar-inferior { display: none; }
 }
 
+.navbar-inferior[hidden] {
+  display: none;
+}
+
 .navbar-inferior__item {
   display: flex;
   flex-direction: column;
@@ -199,6 +207,7 @@
   color: var(--cor-texto-sobre-primaria);
 }
 .botao--primario:hover { filter: brightness(1.08); }
+
 /* Estado desabilitado vale para qualquer variante de botão (primário, secundário, texto), por exemplo: "Resgatar" na tela de Fidelidade quando ocliente ainda não tem pontos suficientes. */
 .botao:disabled {
   opacity: 0.5;
@@ -652,6 +661,245 @@
   border-radius: var(--raio-md);
   font-size: 0.85rem;
   color: var(--cor-texto-secundario);
+}
+
+/* ---------- Painel Administrativo (Gerente/Administrador) ---------- */
+
+.admin-login {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--espaco-5) var(--espaco-4);
+  background: var(--cor-superficie-alt);
+}
+
+.admin-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.admin-menu {
+  background: var(--cor-superficie);
+  border-bottom: 1px solid var(--cor-borda);
+  padding: var(--espaco-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-4);
+}
+
+.admin-menu__marca {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2);
+  font-weight: 700;
+  color: var(--cor-primaria-escura);
+}
+
+.admin-menu__abas {
+  display: flex;
+  gap: var(--espaco-2);
+  flex-wrap: wrap;
+}
+
+.admin-menu__aba {
+  display: flex;
+  align-items: center;
+  gap: var(--espaco-2);
+  padding: var(--espaco-2) var(--espaco-3);
+  border-radius: var(--raio-md);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--cor-texto-secundario);
+}
+
+.admin-menu__aba[aria-current="page"] {
+  background: var(--cor-primaria-clara);
+  color: var(--cor-primaria-escura);
+}
+
+.admin-menu__conta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-1);
+  padding-top: var(--espaco-3);
+  border-top: 1px solid var(--cor-borda);
+}
+
+.admin-menu__conta-nome {
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.admin-menu__conta-cargo {
+  font-size: 0.8rem;
+  color: var(--cor-texto-secundario);
+  margin-bottom: var(--espaco-2);
+}
+
+.admin-conteudo {
+  flex: 1;
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: var(--espaco-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-4);
+}
+
+@media (min-width: 1024px) {
+  .admin-layout {
+    flex-direction: row;
+  }
+  .admin-menu {
+    width: 260px;
+    flex-shrink: 0;
+    border-bottom: none;
+    border-right: 1px solid var(--cor-borda);
+    min-height: 100vh;
+    position: sticky;
+    top: 0;
+  }
+  .admin-menu__abas {
+    flex-direction: column;
+  }
+  .admin-menu__conta {
+    margin-top: auto;
+  }
+  .admin-conteudo {
+    padding: var(--espaco-6);
+  }
+}
+
+/* Seletor de unidade e tabela de gestão de cardápio */
+.admin-tabela-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-lg);
+}
+
+.admin-tabela {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 560px;
+  background: var(--cor-superficie);
+}
+
+.admin-tabela th,
+.admin-tabela td {
+  padding: var(--espaco-3);
+  text-align: left;
+  border-bottom: 1px solid var(--cor-borda);
+  font-size: 0.9rem;
+  vertical-align: middle;
+}
+
+.admin-tabela th {
+  background: var(--cor-superficie-alt);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--cor-texto-secundario);
+}
+
+.admin-tabela tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-tabela input[type="number"] {
+  width: 100px;
+  padding: var(--espaco-2);
+  border-radius: var(--raio-sm);
+  border: 1px solid var(--cor-borda);
+  background: var(--cor-fundo);
+  color: var(--cor-texto);
+}
+
+/* Interruptor reaproveitado em cardápio e promoções do painel admin. */
+.interruptor {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--espaco-2);
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.interruptor input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.interruptor__trilho {
+  width: 40px;
+  height: 22px;
+  border-radius: var(--raio-pill);
+  background: var(--cor-borda);
+  position: relative;
+  transition: background 0.15s ease;
+  flex-shrink: 0;
+}
+
+.interruptor__trilho::before {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.15s ease;
+  box-shadow: var(--sombra-sm);
+}
+
+.interruptor input:checked + .interruptor__trilho {
+  background: var(--cor-sucesso);
+}
+
+.interruptor input:checked + .interruptor__trilho::before {
+  transform: translateX(18px);
+}
+
+.interruptor input:focus-visible + .interruptor__trilho {
+  outline: 3px solid var(--cor-foco);
+  outline-offset: 2px;
+}
+
+/* Cartões de estatística usados nos Relatórios */
+.stat-cartao {
+  background: var(--cor-superficie);
+  border: 1px solid var(--cor-borda);
+  border-radius: var(--raio-lg);
+  padding: var(--espaco-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-1);
+}
+
+.stat-cartao__valor {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--cor-primaria-escura);
+}
+
+.stat-cartao__rotulo {
+  font-size: 0.85rem;
+  color: var(--cor-texto-secundario);
+}
+
+.admin-secao {
+  display: flex;
+  flex-direction: column;
+  gap: var(--espaco-3);
+}
+
+.admin-secao h2 {
+  font-size: 1.05rem;
 }
 
 /* ---------- Página de Privacidade / Termo de consentimento ---------- */

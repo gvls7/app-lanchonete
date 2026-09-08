@@ -1,9 +1,5 @@
 /*
-  Design tokens (variáveis de tema) do sistema.
-  Dois temas de marca coexistem por perfil de uso:
-    - [data-theme="cliente"] -> claro, vermelho/branco, verde para caminhos de sucesso
-    - [data-theme="admin"]   -> escuro, azul, para o painel administrativo
-  As variáveis também já preparam uma futura alteracao de claro/escuro dentro de cada tema (via [data-modo="escuro"]), que será ligado posteriormente.
+  Design tokens (variáveis de tema) do sistema. As variáveis também já preparam uma futura alteracao de claro/escuro dentro de cada tema (via data-modo="escuro"]), que será ligado posteriormente.
 */
 
 :root {

@@ -1,10 +1,6 @@
 /*
-  data.js
   Camada de acesso aos dados mockados (JSON estáticos em /data).
-  Não existe backend real: cada função abaixo simula uma "consulta"
-  fazendo fetch de um arquivo local e devolvendo uma Promise, para que
-  o restante do código já esteja pronto para, no futuro, trocar por
-  chamadas reais a uma API sem precisar mudar as telas.
+  Não existe backend real: cada função abaixo simula uma "consulta" fazendo fetch de um arquivo local e devolvendo uma Promise, para que o restante do código já esteja pronto para, no futuro, trocar por chamadas reais a uma API sem precisar mudar as telas.
 */
 
 const cache = {};
@@ -31,8 +27,7 @@ export async function buscarUnidade(unidadeId) {
 
 export async function buscarCardapio(unidadeId) {
   const cardapios = await carregarJSON("data/cardapio.json");
-  // Dado mockado só cobre a unidade un01; demais unidades reutilizam o
-  // mesmo cardápio-base como fallback (documentado no README).
+  // Dado mockado só cobre a unidade un01; demais unidades reutilizam o mesmo cardápio-base como fallback (documentado no README).
   return cardapios.find((c) => c.unidadeId === unidadeId) || cardapios[0];
 }
 
@@ -54,6 +49,11 @@ export async function autenticar(email, senha) {
   return usuarios.find((u) => u.email === email && u.senha === senha) || null;
 }
 
+export async function buscarUsuarioPorEmail(email) {
+  const usuarios = await listarUsuarios();
+  return usuarios.find((u) => u.email.toLowerCase() === email.trim().toLowerCase()) || null;
+}
+
 export function listarPromocoes() {
   return carregarJSON("data/promocoes.json");
 }
@@ -70,4 +70,21 @@ export async function buscarPromocaoPorCodigo(codigo) {
 export async function buscarFidelidade(usuarioId) {
   const registros = await carregarJSON("data/fidelidade.json");
   return registros.find((f) => f.usuarioId === usuarioId) || null;
+}
+
+export function listarTodaFidelidade() {
+  return carregarJSON("data/fidelidade.json");
+}
+
+/* ---------- Gerente/Administrador ---------- */
+
+export function listarAdministradores() {
+  return carregarJSON("data/administradores.json");
+}
+
+export async function autenticarAdmin(email, senha) {
+  const administradores = await listarAdministradores();
+  return (
+    administradores.find((a) => a.email.toLowerCase() === email.trim().toLowerCase() && a.senha === senha) || null
+  );
 }

@@ -174,7 +174,7 @@ export function renderLogin(container) {
     const botaoEsqueci = container.querySelector('[data-papel="esqueci"]');
     if (botaoEsqueci) {
       botaoEsqueci.addEventListener("click", () => {
-        alert("Fluxo de recuperação de senha simulado: um link seria enviado ao e-mail informado.");
+        navegarPara("#/recuperar-senha");
       });
     }
 
@@ -190,8 +190,7 @@ export function renderLogin(container) {
 
     campoEmail.addEventListener("blur", validarCampoEmail);
     campoEmail.addEventListener("input", () => {
-      // Corrige o aviso assim que o valor volta a ficar válido, sem esperar
-      // o próximo blur.
+      // Corrige o aviso assim que o valor volta a ficar válido, sem esperar o próximo blur.
       if (!erroEmailEl.hidden) validarCampoEmail();
     });
 
@@ -227,7 +226,7 @@ export function renderLogin(container) {
       const erroEl = container.querySelector("#erro-auth");
       erroEl.hidden = true;
 
-       const emailOk = validarCampoEmail();
+      const emailOk = validarCampoEmail();
       const telefoneOk = campoTelefone ? validarCampoTelefone() : true;
 
       if (!emailOk) {
@@ -268,3 +267,5 @@ export function renderLogin(container) {
 
   montar();
 }
+
+export { emailValido };

@@ -1,15 +1,12 @@
 /*
-  state.js
-  Estado global da aplicação (sessão, unidade escolhida, carrinho, consentimento
-  LGPD e canal de atendimento). Tudo é mantido em memória + persistido em
-  localStorage, simulando uma sessão de usuário sem backend real.
+  Estado global da aplicação (sessão, unidade escolhida, carrinho, consentimento LGPD e canal de atendimento). Tudo é mantido em memória + persistido em localStorage, simulando uma sessão de usuário sem backend real.
 
-  Um pequeno padrão "observador" (subscribe/notificar) permite que a navbar e
-  outras telas reajam a mudanças (ex: contador do carrinho) sem framework.
+  Um pequeno padrão "observador" (subscribe/notificar) permite que a navbar e outras telas reajam a mudanças (ex: contador do carrinho) sem framework.
 */
 
 const CHAVES = {
   SESSAO: "ln_sessao",
+  SESSAO_ADMIN: "ln_sessao_admin",
   CARRINHO: "ln_carrinho",
   UNIDADE: "ln_unidade_selecionada",
   LGPD: "ln_consentimento_lgpd",
@@ -47,6 +44,7 @@ export function inscrever(fn) {
 
 export const estado = {
   usuario: lerLocalStorage(CHAVES.SESSAO, null),
+  admin: lerLocalStorage(CHAVES.SESSAO_ADMIN, null), // sessão do Gerente/Administrador, separada da sessão do Cliente
   carrinho: lerLocalStorage(CHAVES.CARRINHO, []), // [{ itemId, unidadeId, quantidade, adicionais, removidos, observacao, precoUnitario }]
   unidadeSelecionada: lerLocalStorage(CHAVES.UNIDADE, null),
   consentimentoLGPD: lerLocalStorage(CHAVES.LGPD, null), // null | { aceitouCookies, aceitouCadastro, data }
@@ -54,7 +52,7 @@ export const estado = {
   canal: "padrao", // "padrao" | "totem" — definido no boot a partir de ?canal=totem
 };
 
-/* ---------- Sessão / autenticação ---------- */
+/* ---------- Sessão / autenticação (Cliente) ---------- */
 
 export function definirUsuario(usuario) {
   estado.usuario = usuario;
@@ -65,6 +63,21 @@ export function definirUsuario(usuario) {
 export function encerrarSessao() {
   estado.usuario = null;
   salvarLocalStorage(CHAVES.SESSAO, null);
+  notificar();
+}
+
+/* ---------- Sessão / autenticação (Gerente/Administrador) ---------- */
+// Mantida separada da sessão do Cliente: um Gerente autenticado no painel - admin não é um Cliente logado (e vice-versa)
+
+export function definirAdmin(admin) {
+  estado.admin = admin;
+  salvarLocalStorage(CHAVES.SESSAO_ADMIN, admin);
+  notificar();
+}
+
+export function encerrarSessaoAdmin() {
+  estado.admin = null;
+  salvarLocalStorage(CHAVES.SESSAO_ADMIN, null);
   notificar();
 }
 
