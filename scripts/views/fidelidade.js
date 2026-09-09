@@ -2,7 +2,7 @@
   Área de Fidelidade / Pontos - acúmulo de pontos, resgate de recompensas e extrato de pontos.
 */
 
-import { buscarFidelidade } from "../data.js";
+import { obterOuCriarFidelidade } from "../data.js";
 import { estado } from "../state.js";
 import { navegarPara } from "../app.js";
 import { renderBadgeFidelidade } from "../components/loyaltyBadge.js";
@@ -22,9 +22,7 @@ export async function renderFidelidade(container) {
 
   container.innerHTML = `<section class="tela"><p>Carregando fidelidade...</p></section>`;
 
-  // Usuários recém-cadastrados no protótipo (mock) ainda não têm registro em
-  // fidelidade.json — usamos o registro de exemplo (usr01) como referência.
-  const fidelidade = (await buscarFidelidade(estado.usuario.id)) || (await buscarFidelidade("usr01"));
+  const fidelidade = await ObterOuCriarFidelidade(estado.usuario.id);
 
   let mensagemResgate = "";
 
@@ -58,24 +56,26 @@ export async function renderFidelidade(container) {
                 </button>
             </div>
           `
-            )
-            .join("")}
+                )
+                .join("")}
         </div>
       </div>
 
       <div>
         <h2 style="font-size:1rem; margin-bottom:var(--espaco-3);">Extrato de pontos</h2>
         <div style="display:flex; flex-direction:column; gap:var(--espaco-1);">
-          ${fidelidade.historico
-            .map(
-              (h) => `
+          ${fidelidade.historico.length === 0
+            ? `<p class="campo__ajuda">Nenhum lançamento ainda — faça um pedido para começar a ganhar pontos.</p>`
+            : fidelidade.historico
+                .map(
+                  (h) => `
             <div class="resumo-linha">
               <span>${h.descricao} <br><small style="color:var(--cor-texto-secundario);">${new Date(h.data).toLocaleDateString("pt-BR")}</small></span>
               <span class="${h.pontos > 0 ? "resumo-linha--desconto" : ""}">${h.pontos > 0 ? "+" : ""}${h.pontos}</span>
             </div>
           `
-            )
-            .join("")}
+                )
+                .join("")}
         </div>
       </div>
     </section>

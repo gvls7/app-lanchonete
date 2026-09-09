@@ -44,11 +44,24 @@ export async function renderCarrinho(container) {
     `;
   }
 
+  function renderBlocoPontos(pontosAGanhar) {
+    if (!estado.usuario) {
+      // Sem conta, não há onde guardar o saldo de pontos, então não faz sentido mostrar a estimativa de pontos a ganhar.
+      return `
+        <div class="bloqueio-login" style="margin-top:var(--espaco-3);">
+          <span>Crie uma conta para começar a ganhar pontos de fidelidade nos seus pedidos.</span>
+          <button type="button" class="botao botao--secundario botao--bloco" data-papel="login-pontos">Entrar ou criar conta</button>
+        </div>
+      `;
+    }
+    return `<p class="selo selo--sucesso" style="margin-top:var(--espaco-3);">Você ganha ${pontosAGanhar} pontos de fidelidade neste pedido</p>`;
+  }
+
   function render() {
     const subtotal = calcularSubtotalCarrinho();
     const desconto = estado.usuario ? calcularDesconto(subtotal) : 0;
     const total = Math.max(0, subtotal - desconto);
-    const pontosAGanhar = Math.floor(total);
+    const pontosAGanhar = estado.usuario ? Math.floor(total) : 0;
 
     container.innerHTML = `
       <section class="tela">
@@ -80,7 +93,7 @@ export async function renderCarrinho(container) {
                 <div class="resumo-linha resumo-linha--total"><span>Total</span><span>${formatarPreco(total)}</span></div>
               </div>
 
-              <p class="selo selo--sucesso" style="margin-top:var(--espaco-3);">Você ganha ${pontosAGanhar} pontos de fidelidade neste pedido</p>
+              ${renderBlocoPontos(pontosAGanhar)}
 
               <button type="button" class="botao botao--primario botao--bloco" style="margin-top:var(--espaco-4);" data-papel="checkout">
                 Ir para pagamento
@@ -118,9 +131,14 @@ export async function renderCarrinho(container) {
       });
     });
 
-     const botaoLoginCupom = container.querySelector('[data-papel="login-cupom"]');
+    const botaoLoginCupom = container.querySelector('[data-papel="login-cupom"]');
     if (botaoLoginCupom) {
       botaoLoginCupom.addEventListener("click", () => navegarPara("#/login"));
+    }
+
+    const botaoLoginPontos = container.querySelector('[data-papel="login-pontos"]');
+    if (botaoLoginPontos) {
+      botaoLoginPontos.addEventListener("click", () => navegarPara("#/login"));
     }
 
     const botaoAplicarCupom = container.querySelector('[data-papel="aplicar-cupom"]');

@@ -3,7 +3,8 @@
   a cada poucos segundos para demonstrar a experiência.
 */
 
-import { estado, definirPedidoAtual } from "../state.js";
+import { estado } from "../state.js";
+import { confirmarPagamentoPedido } from "../pedidoOrquestrador.js";
 import { navegarPara } from "../app.js";
 import { formatarPreco } from "../components/productCard.js";
 
@@ -41,6 +42,8 @@ export function renderStatusPedido(container) {
 
   function render() {
     const pagamentoPendente = pedido.formaPagamento === "dinheiro" && pedido.statusPagamento === "pendente";
+    const pontosCreditadosNoDinheiro =
+      pedido.formaPagamento === "dinheiro" && pedido.statusPagamento === "pago" && pedido.pontosCreditados;
     container.innerHTML = `
       <section class="tela" style="max-width:520px; margin:0 auto;">
         <div class="tela-cabecalho">
@@ -52,8 +55,7 @@ export function renderStatusPedido(container) {
             <p class="selo selo--alerta">Pagamento pendente — pague em dinheiro na retirada</p>
             <p class="campo__ajuda" style="margin-top:var(--espaco-2);">
               Seu pedido já foi enviado para a cozinha. O valor de ${formatarPreco(pedido.total)}
-              será cobrado e os ${pedido.pontosGanhos} pontos de fidelidade só são creditados quando
-              o atendente confirmar o pagamento na retirada.
+              será cobrado${pedido.pontosGanhos > 0 ? ` e os ${pedido.pontosGanhos} pontos de fidelidade só são creditados quando o atendente confirmar o pagamento na retirada` : ""}.
             </p>
             <button type="button" class="botao botao--secundario botao--bloco" style="margin-top:var(--espaco-3);" data-papel="confirmar-pagamento">
               Confirmar pagamento na retirada
@@ -93,10 +95,9 @@ export function renderStatusPedido(container) {
 
     const botaoConfirmarPagamento = container.querySelector('[data-papel="confirmar-pagamento"]');
     if (botaoConfirmarPagamento) {
-      botaoConfirmarPagamento.addEventListener("click", () => {
+      botaoConfirmarPagamento.addEventListener("click", async () => {
         // só a partir daqui o pagamento é considerado concluído e os pontos de fidelidade entram no extrato do cliente.
-        pedido.statusPagamento = "pago";
-        definirPedidoAtual(pedido);
+        await confirmarPagamentoPedido(pedido);
         render();
       });
     }

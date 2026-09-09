@@ -5,6 +5,7 @@
 */
 
 import { estado, ehTotem, definirPedidoAtual, limparCarrinho } from "../state.js";
+import { montarPedido } from "../pedidoOrquestrador.js";
 import { navegarPara } from "../app.js";
 import { formatarPreco } from "../components/productCard.js";
 
@@ -82,18 +83,8 @@ export function renderCheckout(container) {
     container.querySelector('[data-papel="pagar"]').addEventListener("click", () => {
       // Dinheiro na retirada não passa por nenhum sistema de pagamento confirmado com a cozinha, mas o pagamento em si fica pendente até ser recebido presencialmente na retirada.
       if (formaSelecionada === "dinheiro") {
-        const numeroPedido = `#${Math.floor(10000 + Math.random() * 9000)}`;
-        definirPedidoAtual({
-          numero: numeroPedido,
-          unidade: estado.unidadeSelecionada,
-          itens: estado.carrinho,
-          total: resumo.total,
-          pontosGanhos: resumo.pontosAGanhar,
-          formaPagamento: "dinheiro",
-          statusPagamento: "pendente",
-          status: "recebido",
-          criadoEm: new Date().toISOString(),
-        });
+        const pedido = montarPedido({ formaPagamento: "dinheiro", statusPagamento: "pendente" });
+        definirPedidoAtual(pedido);
         limparCarrinho();
         navegarPara("#/pedido/status");
         return;

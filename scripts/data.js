@@ -76,6 +76,53 @@ export function listarTodaFidelidade() {
   return carregarJSON("data/fidelidade.json");
 }
 
+// Catálogo padrão de recompensas usado apenas para criar o registro de fidelidade de um usuário novo. Mantém o mesmo catálogo já usado pelos registros de exemplo, todas com "disponivel: true"
+const RECOMPENSAS_PADRAO = () => [
+  { id: "rec01", nome: "Sobremesa gratis", pontosNecessarios: 100, disponivel: true },
+  { id: "rec02", nome: "Bebida gratis", pontosNecessarios: 60, disponivel: true },
+  { id: "rec03", nome: "15% de desconto no próximo pedido", pontosNecessarios: 250, disponivel: true },
+  { id: "rec04", nome: "Lanche gratis (até R$ 30)", pontosNecessarios: 500, disponivel: true },
+];
+
+/*
+ Devolve o registro de fidelidade do usuário, criando um novo quando ele ainda não existir. Criar um registro isolado por usuário evita que o saldo de um cliente novo se misture com o do usr01
+ */
+export async function obterOuCriarFidelidade(usuario) {
+  const registros = await listarTodaFidelidade();
+  let registro = registros.find((f) => f.usuarioId === usuario.id);
+  if (!registro) {
+    registro = {
+      usuarioId: usuario.id,
+      pontosAtuais: 0,
+      nivelAtual: "Bronze",
+      proximoNivel: "Prata",
+      pontosProximoNivel: 150,
+      historico: [],
+      recompensasDisponiveis: RECOMPENSAS_PADRAO(),
+    };
+    registros.push(registro);
+  }
+  return registro;
+}
+
+/*
+ * Credita pontos de fidelidade de verdade no registro do usuário criando um registro próprio antes, se necessário e insere o lançamento no extrato.
+ */
+export async function creditarPontosFidelidade(usuario, pontos, descricao) {
+  if (!usuario || !pontos || pontos <= 0) return null;
+
+  const registro = await obterOuCriarFidelidade(usuario);
+  registro.pontosAtuais += pontos;
+  registro.historico.unshift({
+    id: `credito-${Date.now()}`,
+    tipo: "credito",
+    pontos,
+    descricao,
+    data: new Date().toISOString(),
+  });
+  return registro;
+}
+
 /* ---------- Gerente/Administrador ---------- */
 
 export function listarAdministradores() {

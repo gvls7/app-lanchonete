@@ -16,7 +16,7 @@ export function renderConfirmacaoPagamento(container) {
         <div style="font-size:3rem;" aria-hidden="true">✅</div>
         <h1>Pagamento aprovado!</h1>
         <p>Pedido ${pedido.numero} confirmado em ${pedido.unidade.nome}.</p>
-        <p class="selo selo--sucesso">Total pago: ${formatarPreco(pedido.total)} • +${pedido.pontosGanhos} pontos de fidelidade</p>
+        <p class="selo selo--sucesso">Total pago: ${formatarPreco(pedido.total)}${pedido.pontosCreditados ? ` • +${pedido.pontosGanhos} pontos de fidelidade` : ""}</p>
         <div class="flex-linha">
           <button type="button" class="botao botao--primario" data-papel="status">Acompanhar status do pedido</button>
           <button type="button" class="botao botao--secundario" data-papel="cardapio">Voltar ao cardápio</button>
