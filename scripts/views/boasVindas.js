@@ -30,6 +30,7 @@ export async function renderBoasVindas(container) {
   try {
     const unidades = await listarUnidades();
     const listaEl = container.querySelector("#lista-unidades");
+    if (!listaEl) return;
     listaEl.innerHTML = unidades
       .map(
         (u) => `
@@ -60,7 +61,10 @@ export async function renderBoasVindas(container) {
       continuar.querySelector("[data-papel=continuar]").addEventListener("click", () => navegarPara("#/cardapio"));
     }
   } catch (erro) {
-    container.querySelector("#lista-unidades").innerHTML = `<p class="selo selo--indisponivel">Não foi possível carregar as unidades. Tente novamente.</p>`;
+    const listaEl = container.querySelector("#lista-unidades");
+    if (listaEl) {
+      listaEl.innerHTML = `<p class="selo selo--indisponivel">Não foi possível carregar as unidades. Tente novamente.</p>`;
+    }
     console.error(erro);
   }
 }

@@ -22,7 +22,21 @@ export async function renderFidelidade(container) {
 
   container.innerHTML = `<section class="tela"><p>Carregando fidelidade...</p></section>`;
 
-  const fidelidade = await ObterOuCriarFidelidade(estado.usuario.id);
+  let fidelidade;
+  try {
+    fidelidade = await obterOuCriarFidelidade(estado.usuario);
+  } catch (erro) {
+    container.innerHTML = `
+      <section class="tela estado-central">
+        <h1>Programa de Fidelidade</h1>
+        <p class="selo selo--indisponivel">Não foi possível carregar sua fidelidade. Tente novamente.</p>
+        <button type="button" class="botao botao--primario" data-papel="tentar-novamente">Tentar novamente</button>
+      </section>
+    `;
+    container.querySelector('[data-papel="tentar-novamente"]').addEventListener("click", () => renderFidelidade(container));
+    console.error(erro);
+    return;
+  }
 
   let mensagemResgate = "";
 
@@ -37,7 +51,7 @@ export async function renderFidelidade(container) {
       ${renderBadgeFidelidade(fidelidade)}
 
       ${mensagemResgate ? `<p class="selo selo--sucesso">${mensagemResgate}</p>` : ""}
-      
+
       <div>
         <h2 style="font-size:1rem; margin-bottom:var(--espaco-3);">Recompensas disponíveis</h2>
           <div style="display:flex; flex-direction:column; gap:var(--espaco-2);">
@@ -56,8 +70,8 @@ export async function renderFidelidade(container) {
                 </button>
             </div>
           `
-                )
-                .join("")}
+              )
+              .join("")}
         </div>
       </div>
 
