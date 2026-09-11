@@ -13,6 +13,15 @@ const CHAVES = {
   PEDIDO_ATUAL: "ln_pedido_atual",
 };
 
+const CAMPO_POR_CHAVE = {
+  [CHAVES.SESSAO]: "usuario",
+  [CHAVES.SESSAO_ADMIN]: "admin",
+  [CHAVES.CARRINHO]: "carrinho",
+  [CHAVES.UNIDADE]: "unidadeSelecionada",
+  [CHAVES.LGPD]: "consentimentoLGPD",
+  [CHAVES.PEDIDO_ATUAL]: "pedidoAtual",
+};
+
 function lerLocalStorage(chave, valorPadrao) {
   try {
     const bruto = localStorage.getItem(chave);
@@ -33,8 +42,8 @@ function salvarLocalStorage(chave, valor) {
 
 const ouvintes = new Set();
 
-function notificar() {
-  ouvintes.forEach((fn) => fn(estado));
+function notificar(info) {
+  ouvintes.forEach((fn) => fn(estado, info));
 }
 
 export function inscrever(fn) {
@@ -49,7 +58,7 @@ export const estado = {
   unidadeSelecionada: lerLocalStorage(CHAVES.UNIDADE, null),
   consentimentoLGPD: lerLocalStorage(CHAVES.LGPD, null), // null | { aceitouCookies, aceitouCadastro, data }
   pedidoAtual: lerLocalStorage(CHAVES.PEDIDO_ATUAL, null),
-  canal: "padrao", // "padrao" | "totem" — definido no boot a partir de ?canal=totem
+  canal: "padrao", // "padrao" | "totem" - definido no boot a partir de ?canal=totem
 };
 
 /* ---------- Sessão / autenticação (Cliente) ---------- */
@@ -159,4 +168,24 @@ export function definirCanal(canal) {
 
 export function ehTotem() {
   return estado.canal === "totem";
+}
+
+/* ---------- Sincronização entre abas ---------- */
+function aoAlterarStorageEmOutraAba(evento) {
+  const campo = CAMPO_POR_CHAVE[evento.key];
+  if (!campo) return;
+
+  const valorPadrao = campo === "carrinho" ? [] : null;
+  try {
+    estado[campo] = evento.newValue ? JSON.parse(evento.newValue) : valorPadrao;
+  } catch (erro) {
+    console.warn(`Falha ao sincronizar "${evento.key}" alterado em outra aba`, erro);
+    return;
+  }
+
+  notificar({ origem: "outra-aba", campo });
+}
+
+if (typeof window !== "undefined") {
+  window.addEventListener("storage", aoAlterarStorageEmOutraAba);
 }

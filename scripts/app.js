@@ -139,6 +139,13 @@ export function navegarPara(rota) {
   }
 }
 
+const CAMPOS_QUE_EXIGEM_RERENDER_DE_OUTRA_ABA = new Set([
+  "usuario",
+  "admin",
+  "carrinho",
+  "pedidoAtual",
+]);
+
 function inicializarCanal() {
   const parametros = new URLSearchParams(location.search);
   const canal = parametros.get("canal") === "totem" ? "totem" : "padrao";
@@ -156,9 +163,12 @@ function iniciar() {
   window.addEventListener("hashchange", renderizarRotaAtual);
 
   // Mantém a navbar (contador do carrinho, sessão) sincronizada sempre que o estado global muda, mesmo sem navegação de rota.
-  inscrever(() => {
+  inscrever((_estadoAtual, info) => {
     if (!location.hash.startsWith("#/admin")) {
       renderNavbar(location.hash || "#/boas-vindas");
+    }
+    if (info && info.origem === "outra-aba" && CAMPOS_QUE_EXIGEM_RERENDER_DE_OUTRA_ABA.has(info.campo)) {
+      renderizarRotaAtual();
     }
   });
 

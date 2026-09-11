@@ -1,0 +1,166 @@
+[
+  {
+    "numero": "#10112",
+    "unidadeId": "un01",
+    "unidadeNome": "Raízes do Nordeste - Santo Antonio",
+    "itens": [
+      { "nome": "X-Carne de Sol", "quantidade": 2 },
+      { "nome": "Refrigerante Lata", "quantidade": 2 }
+    ],
+    "total": 64.80,
+    "formaPagamento": "cartao",
+    "pontosGanhos": 64,
+    "visitante": false,
+    "criadoEm": "2026-09-08T19:10:00-03:00"
+  },
+  {
+    "numero": "#10111",
+    "unidadeId": "un02",
+    "unidadeNome": "Raízes do Nordeste - Piedade",
+    "itens": [
+      { "nome": "Burger Raiz", "quantidade": 1 },
+      { "nome": "Suco de Caju Natural", "quantidade": 1 }
+    ],
+    "total": 39.80,
+    "formaPagamento": "pix",
+    "pontosGanhos": 39,
+    "visitante": false,
+    "criadoEm": "2026-09-06T12:35:00-03:00"
+  },
+  {
+    "numero": "#10110",
+    "unidadeId": "un01",
+    "unidadeNome": "Raízes do Nordeste - Santo Antonio",
+    "itens": [
+      { "nome": "Wrap de Charque", "quantidade": 3 }
+    ],
+    "total": 67.50,
+    "formaPagamento": "dinheiro",
+    "pontosGanhos": 0,
+    "visitante": true,
+    "criadoEm": "2026-09-04T20:05:00-03:00"
+  },
+  {
+    "numero": "#10109",
+    "unidadeId": "un03",
+    "unidadeNome": "Raízes do Nordeste - Bela Vista",
+    "itens": [
+      { "nome": "Macaxeira Frita", "quantidade": 2 },
+      { "nome": "Pastel de Feira (3 un)", "quantidade": 1 }
+    ],
+    "total": 47.80,
+    "formaPagamento": "cartao",
+    "pontosGanhos": 47,
+    "visitante": false,
+    "criadoEm": "2026-09-02T13:20:00-03:00"
+  },
+  {
+    "numero": "#10108",
+    "unidadeId": "un01",
+    "unidadeNome": "Raízes do Nordeste - Santo Antonio",
+    "itens": [
+      { "nome": "X-Carne de Sol", "quantidade": 1 },
+      { "nome": "Burger Raiz", "quantidade": 1 },
+      { "nome": "Refrigerante Lata", "quantidade": 2 }
+    ],
+    "total": 69.80,
+    "formaPagamento": "pix",
+    "pontosGanhos": 69,
+    "visitante": false,
+    "criadoEm": "2026-08-31T19:45:00-03:00"
+  },
+  {
+    "numero": "#10107",
+    "unidadeId": "un02",
+    "unidadeNome": "Raízes do Nordeste - Piedade",
+    "itens": [
+      { "nome": "Suco de Caju Natural", "quantidade": 4 }
+    ],
+    "total": 39.60,
+    "formaPagamento": "dinheiro",
+    "pontosGanhos": 0,
+    "visitante": true,
+    "criadoEm": "2026-08-29T11:15:00-03:00"
+  },
+  {
+    "numero": "#10106",
+    "unidadeId": "un01",
+    "unidadeNome": "Raízes do Nordeste - Santo Antonio",
+    "itens": [
+      { "nome": "Banana Frita", "quantidade": 2 }
+    ],
+    "total": 33.80,
+    "formaPagamento": "cartao",
+    "pontosGanhos": 33,
+    "visitante": false,
+    "criadoEm": "2026-08-27T21:00:00-03:00"
+  },
+  {
+    "numero": "#10105",
+    "unidadeId": "un03",
+    "unidadeNome": "Raízes do Nordeste - Bela Vista",
+    "itens": [
+      { "nome": "Burger Raiz", "quantidade": 2 },
+      { "nome": "Suco de Caju Natural", "quantidade": 2 }
+    ],
+    "total": 79.60,
+    "formaPagamento": "pix",
+    "pontosGanhos": 79,
+    "visitante": false,
+    "criadoEm": "2026-08-25T18:30:00-03:00"
+  },
+  {
+    "numero": "#10104",
+    "unidadeId": "un02",
+    "unidadeNome": "Raízes do Nordeste - Piedade",
+    "itens": [
+      { "nome": "X-Carne de Sol", "quantidade": 1 },
+      { "nome": "Macaxeira Frita", "quantidade": 1 }
+    ],
+    "total": 39.80,
+    "formaPagamento": "dinheiro",
+    "pontosGanhos": 39,
+    "visitante": false,
+    "criadoEm": "2026-08-22T12:50:00-03:00"
+  },
+  {
+    "numero": "#10103",
+    "unidadeId": "un01",
+    "unidadeNome": "Raízes do Nordeste - Santo Antonio",
+    "itens": [
+      { "nome": "Pastel de Feira (3 un)", "quantidade": 2 }
+    ],
+    "total": 36.00,
+    "formaPagamento": "cartao",
+    "pontosGanhos": 0,
+    "visitante": true,
+    "criadoEm": "2026-08-20T20:15:00-03:00"
+  },
+  {
+    "numero": "#10102",
+    "unidadeId": "un03",
+    "unidadeNome": "Raízes do Nordeste - Bela Vista",
+    "itens": [
+      { "nome": "Wrap de Charque", "quantidade": 1 },
+      { "nome": "Refrigerante Lata", "quantidade": 1 }
+    ],
+    "total": 30.00,
+    "formaPagamento": "pix",
+    "pontosGanhos": 30,
+    "visitante": false,
+    "criadoEm": "2026-08-18T13:05:00-03:00"
+  },
+  {
+    "numero": "#10101",
+    "unidadeId": "un02",
+    "unidadeNome": "Raízes do Nordeste - Piedade",
+    "itens": [
+      { "nome": "Burger Raiz", "quantidade": 3 }
+    ],
+    "total": 89.70,
+    "formaPagamento": "cartao",
+    "pontosGanhos": 89,
+    "visitante": false,
+    "criadoEm": "2026-08-14T19:40:00-03:00"
+  }
+]

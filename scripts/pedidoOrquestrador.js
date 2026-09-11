@@ -5,7 +5,7 @@
 */
 
 import { estado, definirPedidoAtual } from "./state.js";
-import { creditarPontosFidelidade } from "./data.js";
+import { creditarPontosFidelidade, registrarPedidoConcluido } from "./data.js";
 
 function criarNumeroPedido() {
   return `#${Math.floor(10000 + Math.random() * 9000)}`;
@@ -25,6 +25,7 @@ export function montarPedido({ formaPagamento, statusPagamento }) {
     formaPagamento,
     statusPagamento,
     pontosCreditados: false,
+    registradoHistorico: false,
     status: "recebido",
     criadoEm: new Date().toISOString(),
   };
@@ -33,12 +34,28 @@ export function montarPedido({ formaPagamento, statusPagamento }) {
 /*
  * Confirma o pagamento de um pedido (cartão/PIX aprovados na hora, ou dinheiro confirmado depois pelo atendente na retirada) e credita os pontos de fidelidade uma única vez.
  */
+
 export async function confirmarPagamentoPedido(pedido) {
   pedido.statusPagamento = "pago";
 
   if (!pedido.pontosCreditados && estado.usuario && pedido.pontosGanhos > 0) {
     await creditarPontosFidelidade(estado.usuario, pedido.pontosGanhos, `Pedido ${pedido.numero} - Obrigado!`);
     pedido.pontosCreditados = true;
+  }
+
+    if (!pedido.registradoHistorico) {
+    await registrarPedidoConcluido({
+      numero: pedido.numero,
+      unidadeId: pedido.unidade ? pedido.unidade.id : null,
+      unidadeNome: pedido.unidade ? pedido.unidade.nome : "—",
+      itens: (pedido.itens || []).map((i) => ({ nome: i.nome, quantidade: i.quantidade })),
+      total: pedido.total,
+      formaPagamento: pedido.formaPagamento,
+      pontosGanhos: pedido.pontosCreditados ? pedido.pontosGanhos : 0,
+      visitante: !estado.usuario,
+      criadoEm: pedido.criadoEm,
+    });
+    pedido.registradoHistorico = true;
   }
 
   definirPedidoAtual(pedido);
