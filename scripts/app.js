@@ -3,6 +3,7 @@
 */
 
 import { definirCanal, inscrever, estado } from "./state.js";
+import { inscreverMudancasDeDados } from "./data.js";
 import { renderNavbar } from "./components/navbar.js";
 import { iniciarBannerCookies } from "./components/lgpdBanner.js";
 
@@ -168,6 +169,12 @@ function iniciar() {
       renderNavbar(location.hash || "#/boas-vindas");
     }
     if (info && info.origem === "outra-aba" && CAMPOS_QUE_EXIGEM_RERENDER_DE_OUTRA_ABA.has(info.campo)) {
+      renderizarRotaAtual();
+    }
+  });
+
+  inscreverMudancasDeDados((info) => {
+    if (info && info.origem === "outra-aba") {
       renderizarRotaAtual();
     }
   });

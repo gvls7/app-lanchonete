@@ -71,3 +71,7 @@ h1, h2, h3, h4, p {
   outline: 3px solid var(--cor-foco);
   outline-offset: 2px;
 }
+
+#app:focus {
+  outline: none;
+}

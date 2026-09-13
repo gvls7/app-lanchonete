@@ -2,7 +2,7 @@
   Lista as promoções mockadas, permite ativar/desativar, criar uma nova promoção e excluir.
 */
 
-import { listarPromocoes } from "../../data.js";
+import { listarPromocoes, persistirPromocoes } from "../../data.js";
 import { renderAdminShell } from "../../components/adminShell.js";
 import { formatarPreco } from "../../components/productCard.js";
 
@@ -108,6 +108,7 @@ export async function renderAdminPromocoes(container) {
           codigo: dados.get("codigo").trim().toUpperCase() || null,
           usoMaximo: dados.get("codigo").trim() ? 1 : null,
         });
+        persistirPromocoes();
 
         mensagem = `Promoção "${titulo}" criada com sucesso.`;
         formularioAberto = false;
@@ -120,6 +121,7 @@ export async function renderAdminPromocoes(container) {
         const promo = promocoes.find((p) => p.id === checkbox.dataset.ativa);
         if (!promo) return;
         promo.ativa = checkbox.checked;
+        persistirPromocoes();
         mensagem = `Promoção "${promo.titulo}" agora está ${checkbox.checked ? "ativa" : "inativa"}.`;
         render();
       });
@@ -130,6 +132,7 @@ export async function renderAdminPromocoes(container) {
         const indice = promocoes.findIndex((p) => p.id === botao.dataset.excluir);
         if (indice === -1) return;
         const [removida] = promocoes.splice(indice, 1);
+        persistirPromocoes();
         mensagem = `Promoção "${removida.titulo}" excluída.`;
         render();
       });

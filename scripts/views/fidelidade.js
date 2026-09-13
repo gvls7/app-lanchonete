@@ -2,7 +2,7 @@
   Área de Fidelidade / Pontos - acúmulo de pontos, resgate de recompensas e extrato de pontos.
 */
 
-import { obterOuCriarFidelidade } from "../data.js";
+import { obterOuCriarFidelidade, persistirFidelidade } from "../data.js";
 import { estado } from "../state.js";
 import { navegarPara } from "../app.js";
 import { renderBadgeFidelidade } from "../components/loyaltyBadge.js";
@@ -110,6 +110,7 @@ export async function renderFidelidade(container) {
           descricao: `Resgate: ${recompensa.nome}`,
           data: new Date().toISOString(),
         });
+        persistirFidelidade();
         mensagemResgate = `Resgate confirmado: "${recompensa.nome}" — ${recompensa.pontosNecessarios} pontos debitados.`;
         render();
       });

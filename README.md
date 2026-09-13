@@ -44,12 +44,14 @@ scripts/
   app.js                    Roteador da SPA (hash routing) e inicialização
   state.js                  Estado global (sessão, carrinho, LGPD, canal)
   data.js                   Camada de acesso aos dados mockados (data/*.json)
+  pedidoOrquestrador.js
   components/               Componentes reutilizáveis entre telas
     navbar.js
     modal.js
     lgpdBanner.js
     productCard.js
     loyaltyBadge.js
+    adminSehll.js
   views/                    Uma "tela" por arquivo
     boasVindas.js
     login.js
@@ -62,12 +64,23 @@ scripts/
     statusPedido.js
     fidelidade.js
     promocoes.js
+    itemDetalhe.js
+    privacidade.js
+    recuperarSenha.js
+    redefinirSenha.js
+    /admin
+      adminCardapio.js
+      adminLogin.js
+      adminPromocoes.js
+      adminRelatorios.js
 data/
   unidades.json
   cardapio.json
   usuarios.json
   promocoes.json
   fidelidade.json
+  pedidos.json
+  administradores.json
 ```
 
 ## Decisões técnicas
@@ -116,7 +129,3 @@ data/
 | Finalidade declarada dos dados | Texto explicativo no modal de consentimento |
 | Minimização de dados | Cadastro pede apenas nome, e-mail, telefone e senha |
 | Dados de pagamento não armazenados | Tela de checkout não coleta nem salva número de cartão |
-
-## Status do projeto
-
-Fase 4 — Desenvolvimento da Interface (fluxo completo do **Cliente**). O Painel Administrativo e a integração entre fluxos (Fase 5) ainda não foram desenvolvidos.

@@ -1,5 +1,5 @@
 
-import { buscarCardapio, listarTodaFidelidade, listarUsuarios, listarPromocoes, listarHistoricoPedidos, } from "../../data.js";
+import {buscarCardapio, listarTodaFidelidade, listarUsuarios, listarPromocoes, listarHistoricoPedidos } from "../../data.js";
 import { renderAdminShell } from "../../components/adminShell.js";
 import { formatarPreco } from "../../components/productCard.js";
 
@@ -46,7 +46,14 @@ function calcularEstatisticasDeVendas(historico) {
   return { totalPedidos, receitaTotal, ticketMedio, porFormaPagamento, porUnidade, itensMaisVendidos };
 }
 
+const INTERVALO_ATUALIZACAO_MS = 5000;
+let intervaloAtivo = null;
+
 export async function renderAdminRelatorios(container) {
+  if (intervaloAtivo) {
+    clearInterval(intervaloAtivo);
+    intervaloAtivo = null;
+  }
   const corpo = renderAdminShell(container, "#/admin/relatorios", "Relatórios");
   corpo.innerHTML = `<p>Carregando relatórios...</p>`;
 
@@ -243,4 +250,13 @@ export async function renderAdminRelatorios(container) {
       </div>
     </div>
   `;
+  // Atualização periódica simulando "tempo real": enquanto esta tela continuar aberta, recalcula os relatórios a cada alguns segundos, para que um pedido concluído em outra aba apareça mesmo sem depender só do evento de sincronização entre abas. Para asssim que a aba do gerente for fechada
+  intervaloAtivo = setInterval(() => {
+    if (location.hash !== "#/admin/relatorios") {
+      clearInterval(intervaloAtivo);
+      intervaloAtivo = null;
+      return;
+    }
+    renderAdminRelatorios(container);
+  }, INTERVALO_ATUALIZACAO_MS);
 }

@@ -2,7 +2,7 @@
 Permite ao Gerente escolher uma unidade, ver os itens do cardápio por categoria e alterar preço/disponibilidade.
 */
 
-import { listarUnidades, buscarCardapio } from "../../data.js";
+import { listarUnidades, buscarCardapio, persistirOverrideCardapio } from "../../data.js";
 import { renderAdminShell } from "../../components/adminShell.js";
 import { formatarPreco } from "../../components/productCard.js";
 
@@ -32,7 +32,7 @@ export async function renderAdminCardapio(container) {
 
         ${usandoFallback ? `
           <p class="selo selo--alerta">
-            ${unidadeEscolhida.nome} ainda não tem cardápio próprio cadastrado - exibindo o cardápio-base (o mesmo usado por padrão para as unidades sem cardápio específico) como referência.
+            ${unidadeEscolhida.nome} ainda não tem cardápio próprio cadastrado - exibindo o cardápio-base como referência.
           </p>
         ` : ""}
 
@@ -101,6 +101,7 @@ export async function renderAdminCardapio(container) {
           return;
         }
         item.preco = novoValor;
+        persistirOverrideCardapio(item.id, { preco: novoValor });
         mensagem = `Preço de "${item.nome}" atualizado para ${formatarPreco(novoValor)}.`;
         render();
       });
@@ -111,6 +112,7 @@ export async function renderAdminCardapio(container) {
         const item = encontrarItem(cardapio, checkbox.dataset.disponivel);
         if (!item) return;
         item.disponivel = checkbox.checked;
+        persistirOverrideCardapio(item.id, { disponivel: checkbox.checked });
         mensagem = `"${item.nome}" agora está ${checkbox.checked ? "disponível" : "indisponível"}.`;
         render();
       });
