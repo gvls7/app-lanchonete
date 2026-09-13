@@ -254,6 +254,8 @@ export async function creditarPontosFidelidade(usuario, pontos, descricao) {
 /* ---------- Histórico de pedidos (Admin - Relatórios) ---------- */
 // data/pedidos.json traz um pequeno histórico mockado de pedidos já concluídos usado como base inicial para os relatórios de vendas do Painel Admin, nada é gravado de volta no arquivo .json, um recarregamento da página restaura só os dados de exemplo.
 
+let pedidosInicializados = false;
+
 export async function listarHistoricoPedidos() {
   const historico = await carregarJSON("data/pedidos.json");
   if (!pedidosInicializados) {

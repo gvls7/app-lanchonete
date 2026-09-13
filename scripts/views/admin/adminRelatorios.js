@@ -1,5 +1,5 @@
 
-import {buscarCardapio, listarTodaFidelidade, listarUsuarios, listarPromocoes, listarHistoricoPedidos } from "../../data.js";
+import { buscarCardapio, listarTodaFidelidade, listarUsuarios, listarPromocoes, listarHistoricoPedidos } from "../../data.js";
 import { renderAdminShell } from "../../components/adminShell.js";
 import { formatarPreco } from "../../components/productCard.js";
 
@@ -49,7 +49,19 @@ function calcularEstatisticasDeVendas(historico) {
 const INTERVALO_ATUALIZACAO_MS = 5000;
 let intervaloAtivo = null;
 
+let tokenAtual = 0;
+
+function renderErroRelatorios(corpo, container, meuToken) {
+  if (meuToken !== tokenAtual) return;
+  corpo.innerHTML = `
+    <p class="selo selo--indisponivel">Não foi possível carregar os relatórios. Tente novamente.</p>
+    <button type="button" class="botao botao--primario" data-papel="tentar-novamente">Tentar novamente</button>
+  `;
+  corpo.querySelector('[data-papel="tentar-novamente"]').addEventListener("click", () => renderAdminRelatorios(container));
+}
+
 export async function renderAdminRelatorios(container) {
+  const meuToken = ++tokenAtual;
   if (intervaloAtivo) {
     clearInterval(intervaloAtivo);
     intervaloAtivo = null;
@@ -57,13 +69,22 @@ export async function renderAdminRelatorios(container) {
   const corpo = renderAdminShell(container, "#/admin/relatorios", "Relatórios");
   corpo.innerHTML = `<p>Carregando relatórios...</p>`;
 
-  const [cardapio, fidelidadeRegistros, usuarios, promocoes, historicoPedidos] = await Promise.all([
-    buscarCardapio("un01"),
-    listarTodaFidelidade(),
-    listarUsuarios(),
-    listarPromocoes(),
-    listarHistoricoPedidos(),
-  ]);
+  let cardapio, fidelidadeRegistros, usuarios, promocoes, historicoPedidos;
+  try {
+    [cardapio, fidelidadeRegistros, usuarios, promocoes, historicoPedidos] = await Promise.all([
+      buscarCardapio("un01"),
+      listarTodaFidelidade(),
+      listarUsuarios(),
+      listarPromocoes(),
+      listarHistoricoPedidos(),
+    ]);
+  } catch (erro) {
+    console.error(erro);
+    renderErroRelatorios(corpo, container, meuToken);
+    return;
+  }
+
+  if (meuToken !== tokenAtual) return;
 
   const todosItens = cardapio.categorias.flatMap((c) => c.itens);
   const itensDisponiveis = todosItens.filter((i) => i.disponivel !== false).length;
