@@ -3,7 +3,7 @@
   a cada poucos segundos para demonstrar a experiência.
 */
 
-import { estado } from "../state.js";
+import { estado, ehTotem } from "../state.js";
 import { confirmarPagamentoPedido } from "../pedidoOrquestrador.js";
 import { navegarPara } from "../app.js";
 import { formatarPreco } from "../components/productCard.js";
@@ -62,7 +62,7 @@ export function renderStatusPedido(container) {
             </button>
           </div>
         ` : pedido.formaPagamento === "dinheiro" ? `
-          <p class="selo selo--sucesso">Pagamento recebido em dinheiro na retirada • +${pedido.pontosGanhos} pontos de fidelidade creditados</p>
+            <p class="selo selo--sucesso">Pagamento recebido em dinheiro na retirada${pontosCreditadosNoDinheiro ? ` • +${pedido.pontosGanhos} pontos de fidelidade creditados` : ""}</p>
         ` : ""}
         <div class="cartao">
           <div class="stepper" aria-live="polite">
@@ -83,7 +83,9 @@ export function renderStatusPedido(container) {
           </div>
         </div>
         ${indiceEtapaAtual === ETAPAS.length - 1 ? `
-          <button type="button" class="botao botao--primario botao--bloco" data-papel="fidelidade">Ver pontos ganhos</button>
+          ${ehTotem()
+            ? `<button type="button" class="botao botao--primario botao--bloco" data-papel="novo-pedido">Fazer novo pedido</button>`
+            : `<button type="button" class="botao botao--primario botao--bloco" data-papel="fidelidade">Ver pontos ganhos</button>`}
         ` : `
           <p class="campo__ajuda centralizado">Atualização automática a cada instante (simulação).</p>
         `}
@@ -92,6 +94,9 @@ export function renderStatusPedido(container) {
 
     const botaoFidelidade = container.querySelector('[data-papel="fidelidade"]');
     if (botaoFidelidade) botaoFidelidade.addEventListener("click", () => navegarPara("#/fidelidade"));
+
+    const botaoNovoPedido = container.querySelector('[data-papel="novo-pedido"]');
+    if (botaoNovoPedido) botaoNovoPedido.addEventListener("click", () => navegarPara("#/boas-vindas"));
 
     const botaoConfirmarPagamento = container.querySelector('[data-papel="confirmar-pagamento"]');
     if (botaoConfirmarPagamento) {

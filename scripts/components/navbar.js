@@ -132,7 +132,10 @@ function renderInferior(rotaAtual) {
 
   const contador = totalItensCarrinho();
 
-  container.innerHTML = ITENS_NAV.map((item) => {
+  const itens = ehTotem() ? ITENS_NAV.filter((item) => item.rota !== "#/fidelidade") : ITENS_NAV;
+
+
+  container.innerHTML = itens.map((item) => {
     const ativo = rotaAtual.startsWith(item.rota);
     return `
       <a class="navbar-inferior__item" href="${item.rota}" ${ativo ? 'aria-current="page"' : ""}>

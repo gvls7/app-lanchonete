@@ -4,17 +4,19 @@
 */
 
 import { listarPromocoes } from "../data.js";
-import { estado } from "../state.js";
+import { usuarioAtivo } from "../state.js";
 import { navegarPara } from "../app.js";
 
 const ORDEM_NIVEIS = ["Bronze", "Prata", "Ouro", "Diamante"];
 
 function usuarioElegivel(promocao) {
   if (!promocao.codigo) return true; // promoção geral, sem segmentação
-  if (!estado.usuario) return false;
+    const cliente = usuarioAtivo();
+  if (!cliente) return false;
+
   // Segmentação simples: cupons com "OURO" no código exigem nível Ouro ou superior.
   if (promocao.codigo.includes("OURO")) {
-    return ORDEM_NIVEIS.indexOf(estado.usuario.nivelFidelidade || "Bronze") >= ORDEM_NIVEIS.indexOf("Ouro");
+    return ORDEM_NIVEIS.indexOf(cliente.nivelFidelidade || "Bronze") >= ORDEM_NIVEIS.indexOf("Ouro");
   }
   return true;
 }
@@ -41,6 +43,7 @@ export async function renderPromocoes(container) {
               </div>
               <p style="font-size:0.9rem; color:var(--cor-texto-secundario); margin-top:var(--espaco-2);">${promo.descricao}</p>
               ${!elegivel ? `<p class="selo selo--alerta" style="margin-top:var(--espaco-2);">Disponível para clientes nível Ouro ou Diamante</p>` : ""}
+              ${promo.codigo && !usuarioAtivo() ? `<p class="selo selo--alerta" style="margin-top:var(--espaco-2);">É necessário estar logado para usar este cupom</p>` : ""}
               <button type="button" class="botao botao--secundario botao--bloco" style="margin-top:var(--espaco-3);" data-papel="usar" ${elegivel ? "" : "disabled"}>
                 Usar no carrinho
               </button>

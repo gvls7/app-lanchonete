@@ -4,7 +4,7 @@
   - Pontos só são creditados para quem está com sessão de Cliente ativa - pedidos do modo visitante nunca creditam fidelidade.
 */
 
-import { estado, definirPedidoAtual } from "./state.js";
+import { estado, definirPedidoAtual, usuarioAtivo } from "./state.js";
 import { creditarPontosFidelidade, registrarPedidoConcluido } from "./data.js";
 
 function criarNumeroPedido() {
@@ -38,12 +38,14 @@ export function montarPedido({ formaPagamento, statusPagamento }) {
 export async function confirmarPagamentoPedido(pedido) {
   pedido.statusPagamento = "pago";
 
-  if (!pedido.pontosCreditados && estado.usuario && pedido.pontosGanhos > 0) {
-    await creditarPontosFidelidade(estado.usuario, pedido.pontosGanhos, `Pedido ${pedido.numero} - Obrigado!`);
+  const cliente = usuarioAtivo();
+
+  if (!pedido.pontosCreditados && cliente && pedido.pontosGanhos > 0) {
+    await creditarPontosFidelidade(cliente, pedido.pontosGanhos, `Pedido ${pedido.numero} - Obrigado!`);
     pedido.pontosCreditados = true;
   }
 
-    if (!pedido.registradoHistorico) {
+  if (!pedido.registradoHistorico) {
     await registrarPedidoConcluido({
       numero: pedido.numero,
       unidadeId: pedido.unidade ? pedido.unidade.id : null,
@@ -52,7 +54,7 @@ export async function confirmarPagamentoPedido(pedido) {
       total: pedido.total,
       formaPagamento: pedido.formaPagamento,
       pontosGanhos: pedido.pontosCreditados ? pedido.pontosGanhos : 0,
-      visitante: !estado.usuario,
+      visitante: !cliente,
       criadoEm: pedido.criadoEm,
     });
     pedido.registradoHistorico = true;

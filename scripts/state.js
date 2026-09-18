@@ -170,6 +170,14 @@ export function ehTotem() {
   return estado.canal === "totem";
 }
 
+/*
+Totem é um terminal físico compartilhado na loja, então mesmo que o navegador tenha uma sessão salva de um cliente anterior, o canal totem sempre se comporta como visitante. Qualquer tela que precise responder "existe um cliente logado agora, pra valer?" deve usar esta função em vez de checar `estado.usuario` diretamente.
+ */
+export function usuarioAtivo() {
+  return ehTotem() ? null : estado.usuario;
+}
+
+
 /* ---------- Sincronização entre abas ---------- */
 function aoAlterarStorageEmOutraAba(evento) {
   const campo = CAMPO_POR_CHAVE[evento.key];

@@ -4,7 +4,7 @@
   pagamento não são armazenados localmente — não existe nenhum campo de número de cartão sendo salvo em estado.js/localStorage.
 */
 
-import { estado, ehTotem, definirPedidoAtual, limparCarrinho } from "../state.js";
+import { estado, ehTotem, usuarioAtivo, definirPedidoAtual, limparCarrinho } from "../state.js";
 import { montarPedido } from "../pedidoOrquestrador.js";
 import { navegarPara } from "../app.js";
 import { formatarPreco } from "../components/productCard.js";
@@ -41,7 +41,7 @@ export function renderCheckout(container) {
           <div class="resumo-linha resumo-linha--total"><span>Total a pagar</span><span>${formatarPreco(resumo.total)}</span></div>
         </div>
 
-        ${!totem && !estado.usuario ? `
+        ${!totem && !usuarioAtivo() ? `
           <p class="banner-totem">Você está finalizando como visitante. <a href="#/login">Entrar ou criar conta</a> para acumular pontos de fidelidade neste pedido.</p>
         ` : ""}
 

@@ -12,6 +12,7 @@ import {
   atualizarQuantidade,
   calcularSubtotalCarrinho,
   ehTotem,
+  usuarioAtivo,
 } from "../state.js";
 import { navegarPara } from "../app.js";
 import { formatarPreco } from "../components/productCard.js";
@@ -27,7 +28,12 @@ export async function renderCarrinho(container) {
   }
 
   function renderBlocoCupom() {
-    if (!estado.usuario) {
+
+    if (ehTotem()) {
+      // Totem é atendimento como convidado por definição então nao tem cupom
+      return `<p class="campo__ajuda">Cupons de fidelidade não estão disponíveis no totem.</p>`;
+    }
+    if (!usuarioAtivo()) {
       return `
         <div class="bloqueio-login">
           <span>Entre na sua conta para aplicar cupons de fidelidade.</span>
@@ -45,7 +51,11 @@ export async function renderCarrinho(container) {
   }
 
   function renderBlocoPontos(pontosAGanhar) {
-    if (!estado.usuario) {
+
+    if (ehTotem()) {
+      return `<p class="campo__ajuda" style="margin-top:var(--espaco-3);">Pedidos feitos no totem não acumulam pontos de fidelidade.</p>`;
+    }
+    if (!usuarioAtivo()) {
       // Sem conta, não há onde guardar o saldo de pontos, então não faz sentido mostrar a estimativa de pontos a ganhar.
       return `
         <div class="bloqueio-login" style="margin-top:var(--espaco-3);">
@@ -59,7 +69,7 @@ export async function renderCarrinho(container) {
 
   function render() {
     const subtotal = calcularSubtotalCarrinho();
-    const desconto = estado.usuario ? calcularDesconto(subtotal) : 0;
+    const desconto = usuarioAtivo() ? calcularDesconto(subtotal) : 0;
     const total = Math.max(0, subtotal - desconto);
     const pontosAGanhar = estado.usuario ? Math.floor(total) : 0;
 
@@ -144,8 +154,8 @@ export async function renderCarrinho(container) {
     const botaoAplicarCupom = container.querySelector('[data-papel="aplicar-cupom"]');
     if (botaoAplicarCupom) {
       botaoAplicarCupom.addEventListener("click", async () => {
-        if (!estado.usuario) {
-          navegarPara("#/login");
+        if (!usuarioAtivo()) {
+          if (!ehTotem()) navegarPara("#/login");
           return;
         }
         const codigo = container.querySelector("#campo-cupom").value.trim();
@@ -188,7 +198,7 @@ export async function renderCarrinho(container) {
     `;
   }
 
-  if (!estado.usuario) {
+  if (!usuarioAtivo()) {
     cupomAplicado = null;
     mensagemCupom = { texto: "", classe: "campo__ajuda" };
   }

@@ -3,11 +3,22 @@
 */
 
 import { obterOuCriarFidelidade, persistirFidelidade } from "../data.js";
-import { estado } from "../state.js";
+import { estado, ehTotem } from "../state.js";
 import { navegarPara } from "../app.js";
 import { renderBadgeFidelidade } from "../components/loyaltyBadge.js";
 
 export async function renderFidelidade(container) {
+  
+  if (ehTotem()) {
+    container.innerHTML = `
+      <section class="tela estado-central">
+        <h1>Programa de Fidelidade</h1>
+        <p>O programa de fidelidade não está disponível no totem. Entre na sua conta pelo App ou pelo site para ver seus pontos, nível e recompensas.</p>
+      </section>
+    `;
+    return;
+  }
+
   if (!estado.usuario) {
     container.innerHTML = `
       <section class="tela estado-central">
